@@ -167,6 +167,7 @@ public class MovementController : MonoBehaviour
         }
         CancelPreparedMovement();
         currentMove = null;
+        terminateAtEndOfMove = false;
         EventManager.TriggerEvent(EventNames.END_MOVE);
     }
 }
