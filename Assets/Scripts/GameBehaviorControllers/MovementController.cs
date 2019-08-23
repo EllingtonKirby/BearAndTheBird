@@ -13,7 +13,9 @@ public class MovementController : MonoBehaviour
     private GameObject queuedToMove;
     private float timeToMove;
     private Coroutine currentMove;
+    private Coroutine allMoves;
     private readonly object coroutineLock = new object();
+    private bool terminateAtEndOfMove = false;
 
     private void Awake()
     {
@@ -31,7 +33,7 @@ public class MovementController : MonoBehaviour
         pointsToMoveTo = new List<Vector2>();
         EventManager.StartListening(EventNames.MOVEMENT_QUEUED, OnMovementAddedToQueue);
         EventManager.StartListening(EventNames.MOVEMENT_REMOVED_FROM_QUEUE, OnMovementRemovedFromQueue);
-        EventManager.StartListening(EventNames.TERMINATE_MOVE, TerminateMove);
+        EventManager.StartListening(EventNames.TERMINATE_MOVE, OnMoveTerminated);
     }
 
     private void OnMovementAddedToQueue(System.Object data)
@@ -54,36 +56,21 @@ public class MovementController : MonoBehaviour
         }
     }
 
-    private void TerminateMove(System.Object data)
+    private void OnMoveTerminated(System.Object data)
+    {
+        StartCoroutine(TerminateMove(data));
+    }
+
+    private IEnumerator TerminateMove(System.Object data)
     {
         lock (coroutineLock)
         {
             if (currentMove != null)
             {
-                var copyOfPointsToMove = new List<Vector2>(pointsToMoveTo);               
-                StopAllCoroutines();
-                if (copyOfPointsToMove.Count > 0)
-                {
-                    if (queuedToMove.tag == "Player")
-                    {
-                        foreach (Vector2 position in copyOfPointsToMove)
-                        {
-                            var eventName = string.Format(EventNames.MOVED_TO_POSITION, position.x, position.y);
-                            Debug.Log(eventName);
-                            EventManager.TriggerEvent(eventName);
-                        }
-                    }
-                    pointsToMoveTo.Clear();
-                }
-                if (charSelected != null)
-                {
-                    charSelected.SetIdle();
-                }
-                CancelPreparedMovement();
-                currentMove = null;
-                EventManager.TriggerEvent(EventNames.END_MOVE);
+                terminateAtEndOfMove = true; 
             }
         }
+        yield return null;
     }
 
     public void CancelPreparedMovement()
@@ -112,11 +99,11 @@ public class MovementController : MonoBehaviour
             Debug.Log("Trying to trigger a move without a time to move");
             yield return null;
         }
-        currentMove = StartCoroutine(MoveToPosition(queuedToMove.transform, timeToMove));
-        yield return currentMove;
+        allMoves = StartCoroutine(MoveToPosition(queuedToMove.transform));
+        yield return allMoves;
     }
 
-    public IEnumerator MoveToPosition(Transform transform, float timeToMove)
+    public IEnumerator MoveToPosition(Transform transform)
     {
         for (int i = 0; i < pointsToMoveTo.Count; i++)
         {
@@ -124,7 +111,8 @@ public class MovementController : MonoBehaviour
             Vector2 grid = pointsToMoveTo[i];
             Vector3 position = new Vector3(grid.x, grid.y, transform.position.z);
 
-            yield return StartCoroutine(PerformMovement(transform, position));
+            currentMove = StartCoroutine(PerformMovement(transform, position));
+            yield return currentMove;
         }
 
         pointsToMoveTo.Clear();
@@ -142,10 +130,43 @@ public class MovementController : MonoBehaviour
             toMove.position = Vector3.MoveTowards(toMove.position, position, t);
             yield return null;
         }
-
         GridController.instance.MarkGridTileOccupied(toMove.position);
         var eventName = string.Format(EventNames.MOVED_TO_POSITION, position.x, position.y);
         EventManager.TriggerEvent(eventName);
-        yield return new WaitForEndOfFrame();
+        lock (coroutineLock)
+        {
+            if (terminateAtEndOfMove)
+            {
+                TerminateRemainingMoves();
+                yield return null;
+            }
+        }
+        yield return null;
+    }
+
+    private void TerminateRemainingMoves()
+    {
+        StopAllCoroutines();
+        var copyOfPointsToMove = new List<Vector2>(pointsToMoveTo);
+        if (copyOfPointsToMove.Count > 0)
+        {
+            if (queuedToMove.tag == "Player")
+            {
+                foreach (Vector2 position in copyOfPointsToMove)
+                {
+                    var eventName = string.Format(EventNames.MOVED_TO_POSITION, position.x, position.y);
+                    Debug.Log(eventName);
+                    EventManager.TriggerEvent(eventName);
+                }
+            }
+            pointsToMoveTo.Clear();
+        }
+        if (charSelected != null)
+        {
+            charSelected.SetIdle();
+        }
+        CancelPreparedMovement();
+        currentMove = null;
+        EventManager.TriggerEvent(EventNames.END_MOVE);
     }
 }
