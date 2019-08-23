@@ -17,7 +17,6 @@ public class PlayerCharacterController : MonoBehaviour, MouseEventActionProvider
         transform.position = startPos;
         transform.rotation = Quaternion.identity;
         state = State.IDLE;
-
         GridController.instance.MarkGridTileOccupied(transform.position);
     }
 
