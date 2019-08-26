@@ -5,7 +5,6 @@ using UnityEngine;
 
 public class PlayerCharacterController : MonoBehaviour, MouseEventActionProvider, MovementStyleProvider, StatefulActor
 {
-    public Vector3 startPos;
     public MovementStyle movementStyle;
 
     private State state;
@@ -14,8 +13,6 @@ public class PlayerCharacterController : MonoBehaviour, MouseEventActionProvider
     // Use this for initialization
     void Start()
     {
-        transform.position = startPos;
-        transform.rotation = Quaternion.identity;
         state = State.IDLE;
         GridController.instance.MarkGridTileOccupied(transform.position);
     }

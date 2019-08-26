@@ -96,6 +96,20 @@ public class GridController : MonoBehaviour
         EnemyPlacementController.instance.OnGridLayoutCompleted();
     }
 
+    public bool DestroyTriggerAtPosition(Vector3 origin)
+    {
+        if (triggers.ContainsKey(origin))
+        {
+            var tile = triggers[origin];
+            triggersMap.SetTile(tile.LocalPlace, null);
+            triggers.Remove(origin);
+            return true;
+        } else
+        {
+            return false;
+        }
+    }
+
     public GridTile GetTileAtPosition(Vector3 origin)
     {
         var worldPosition = origin;
