@@ -12,5 +12,6 @@ public class GoalTileController : TrapController
     public override void OnPlayerEnter(PlayerHealthController playerHealth)
     {
         playerHealth.ReachGoal();
+        EventManager.TriggerEvent(EventNames.TERMINATE_MOVE);
     }
 }

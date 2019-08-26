@@ -51,10 +51,6 @@ public class RosterController : MonoBehaviour
 
     public void OnGridCompleted()
     {
-        for (int i = 0; i < rosterSlots; i++)
-        {
-            var character = Instantiate(availableCharacters[i]);
-            activeRoster.Add(character);
-        }
+        
     }
 }
