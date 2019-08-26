@@ -100,9 +100,9 @@ public class EnemyHealthController : MonoBehaviour
 
     public void ReachGoal()
     {
-        isDead = true;
-        RosterController.instance.OnCharacterReachGoal(gameObject.name);
-        GridController.instance.MarkGridTileUnOccupied(transform.position);
-        Destroy(gameObject);
+        //isDead = true;
+        //RosterController.instance.OnCharacterReachGoal(gameObject.name);
+        //GridController.instance.MarkGridTileUnOccupied(transform.position);
+        //Destroy(gameObject);
     }
 }

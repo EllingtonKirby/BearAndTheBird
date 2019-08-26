@@ -9,11 +9,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d746e0082aaaaf0458b2b02bb4d45a47, type: 3}
-  m_Name: Goal Tile
+  m_Script: {fileID: 11500000, guid: 6291881eeb41a46a4adac065c7e5c7ed, type: 3}
+  m_Name: Spike Trap Tile
   m_EditorClassIdentifier: 
-  m_DefaultSprite: {fileID: 21300000, guid: 827633bdaddb5214c83636f9a8554c35, type: 3}
-  m_DefaultGameObject: {fileID: 1668888280045044859, guid: dc5baa8f484be6a4c9a1b76010ef7c60,
+  m_DefaultSprite: {fileID: 21300000, guid: c8ef8cd1c9d6aae4aa318602aed601de, type: 3}
+  m_DefaultGameObject: {fileID: 1853323795825492410, guid: 2315e0ea98a2bb34f8bbc885f7620b20,
     type: 3}
-  m_DefaultColliderType: 2
+  m_DefaultColliderType: 0
   m_TilingRules: []
