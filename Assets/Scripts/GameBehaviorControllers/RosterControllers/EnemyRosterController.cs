@@ -23,6 +23,10 @@ public class EnemyRosterController : MonoBehaviour
 
     public void AddEnemyToRoster(GameObject enemy)
     {
+        //foreach (GameObject enemy in enemies)
+        //{
+        //    enemyRoster.Add(enemy.GetComponent<EnemyController>());
+        //}
         enemyRoster.Add(enemy.GetComponent<EnemyController>());
     }
 

@@ -6,9 +6,12 @@ public class SpawnTileController : MonoBehaviour
 {
     public GameObject characterToSpawn;
 
-    // Start is called before the first frame update
     void Start()
     {
-        Instantiate(characterToSpawn, transform.position, Quaternion.identity);
+        var created = Instantiate(characterToSpawn, transform.position, Quaternion.identity);
+        if (characterToSpawn.tag == "Enemy")
+        {
+            EnemyRosterController.instance.AddEnemyToRoster(created);
+        }
     }
 }
