@@ -29,6 +29,7 @@ public class EnemyRosterController : MonoBehaviour
     public void InitTurnIterator()
     {
         currentTurnPointer = 0;
+        enemyComparer.Init();
         enemyRoster.Sort(enemyComparer);
     }
 

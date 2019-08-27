@@ -29,8 +29,8 @@ public class EnemyPlacementController : MonoBehaviour
         {
             var localPlace = new Vector3Int(pos.x, pos.y, pos.z);
             var tile = GridController.instance.GetTileAtPosition(baseGrid.GetCellCenterWorld(localPlace));
-            //var trigger = GridController.instance.triggersMap.GetInstantiatedObject(loca
-            if (tile != null && tile.State != GridTile.MovementState.OCCUPIED)
+            
+            if (tile != null && tile.State == GridTile.MovementState.DEFAULT)
             {
                 //Found a space that is unoccupied and has no triggers
                 if (GridController.instance.triggersMap.HasTile(localPlace) == false)

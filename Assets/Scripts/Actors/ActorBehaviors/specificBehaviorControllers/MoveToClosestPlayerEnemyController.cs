@@ -11,10 +11,10 @@ public class MoveToClosestPlayerEnemyController : MonoBehaviour, EnemyActionProv
 
     public EnemyAction GetAction()
     {
-        var positionOfNearestCharacter = FindClosestUnoccupiedTile(FindClosestPlayer());
+        var positionOfNearestCharacter = FindClosestPlayer().transform.position;
         var pathToNearestCharacter = AStarHelper.GetPath(
             GridController.instance.GetTileAtPosition(transform.position),
-            positionOfNearestCharacter
+            GridController.instance.GetTileAtPosition(positionOfNearestCharacter)
         );
         var list = pathToNearestCharacter.ConvertAll(
             new System.Converter<GridTile, Vector2>(GetWorldPositionOfGridTile)

@@ -103,7 +103,7 @@ public class GridController : MonoBehaviour
                 TilemapMember = collidersMap,
                 Name = localPlace.x + "," + localPlace.y,
                 Cost = 1,
-                State = GridTile.MovementState.OCCUPIED,
+                State = GridTile.MovementState.COLLIDER,
                 CurrentMovementValue = int.MinValue              
             };
             colliders.Add(tile.WorldLocation, tile);

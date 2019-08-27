@@ -4,7 +4,7 @@ using UnityEngine;
 using Directions = GridController.NeighboringGrids;
 public static class AStarHelper
 {
-    public static List<GridTile> GetPath(GridTile start, GridTile goal)
+    public static List<GridTile> GetPath(GridTile start, GridTile goal, bool isRawCount = false)
     {
         if (start == null)
         {
@@ -33,15 +33,16 @@ public static class AStarHelper
         // by passing by that node. That value is partly known, partly heuristic.
         // with default value of Infinity
         var fScore = new Dictionary<GridTile, float>();
-        fScore[start] = GetHeuristicEstimate(start, goal);
+        fScore[start] = GetHeuristicEstimate(start, goal) - 1f;
         openSetbyFScore.Add(start, fScore[start]);
         while (openSet.Count > 0)
         {
             var current = openSetbyFScore.GetTop();
-            if (current == goal)
-            {
-                return ReconstructPath(current, cameFrom);
-            }
+            //We are trying to navigate to the closest unoccupied tile, so want to recreate from that point
+            //if (current == goal)
+            //{
+            //    return ReconstructPath(current, cameFrom);
+            //}
 
             openSet.Remove(current);
             openSetbyFScore.Remove(current);
@@ -51,9 +52,16 @@ public static class AStarHelper
             {
                 var neighbor = GridController.instance.GetNeighborAt(direction, current.WorldLocation);
 
-                if (neighbor == null || closedSet.Contains(neighbor) || neighbor.State == GridTile.MovementState.OCCUPIED)
+                if (neighbor == null || closedSet.Contains(neighbor) || neighbor.State == GridTile.MovementState.COLLIDER)
                 {
-                    continue;
+                    if (neighbor != goal)
+                    {
+                        continue;
+                    } else
+                    {
+                        //We have gotten to the goal via the closest unoccupied neighbor
+                        return ReconstructPath(current, cameFrom, isRawCount);
+                    }
                 }
 
                 var tentativeGScore = gScore[current] + GetDistanceBetween(current, neighbor);
@@ -74,7 +82,7 @@ public static class AStarHelper
         return new List<GridTile>();
     }
 
-    private static List<GridTile> ReconstructPath(GridTile current, Dictionary<GridTile, GridTile> cameFrom)
+    private static List<GridTile> ReconstructPath(GridTile current, Dictionary<GridTile, GridTile> cameFrom, bool isRawCount)
     {
         var totalList = new List<GridTile>();
         totalList.Add(current);
@@ -86,12 +94,37 @@ public static class AStarHelper
             next = cameFrom[next];
         }
         totalList.Reverse();
-        return totalList;
+        if (!isRawCount)
+        {
+            var progressableTiles = new List<GridTile>();
+            foreach (GridTile tile in totalList)
+            {
+                if (tile.State == GridTile.MovementState.OCCUPIED)
+                {
+                    break;
+                }
+                else
+                {
+                    progressableTiles.Add(tile);
+                }
+            }
+            return progressableTiles;
+        } else
+        {
+            return totalList;
+        }
+
     }
 
     private static float GetHeuristicEstimate(GridTile current, GridTile goal)
     {
-        return Vector2.Distance(current.WorldLocation, goal.WorldLocation);
+        var magnitude = Vector2.Distance(current.WorldLocation, goal.WorldLocation);
+        //Want to make occupied tiles less appealing, but still possible to navigate through
+        if (current.State == GridTile.MovementState.OCCUPIED)
+        {
+            magnitude += .3f;
+        }
+        return magnitude;
     }
 
     private static int GetDistanceBetween(GridTile current, GridTile neighbor)

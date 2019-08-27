@@ -27,6 +27,7 @@ public class GridTile
         ELLIGIBLE_FOR_MOVE,
         QUEUED_FOR_MOVE,
         OCCUPIED,
+        COLLIDER,
         NOT_IN_GRID
     }
 }
