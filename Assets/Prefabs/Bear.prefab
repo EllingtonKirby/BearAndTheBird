@@ -223,7 +223,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 538f3bcf63cded14c90e734848251693, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  startPos: {x: 9.5, y: -8.5, z: 0}
   movementStyle: {fileID: 11400000, guid: 5a9f38d95bfe4734cbb20a5e843305f1, type: 2}
 --- !u!114 &8225898135380298184
 MonoBehaviour:
@@ -250,7 +249,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7c977014cd766d541922f5aaed955d06, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  startingHealth: 10
+  startingHealth: 4
   healthTextName: Bear Health Value
   healthLabelTextName: Bear Health Label
 --- !u!50 &7552140213341508290

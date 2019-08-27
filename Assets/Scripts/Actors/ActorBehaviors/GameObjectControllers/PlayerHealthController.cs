@@ -16,6 +16,7 @@ public class PlayerHealthController : MonoBehaviour
     Text healthText;
     Text healthLabelText;
     SpriteRenderer spriteRenderer;
+    Vector3? terminateAtPosition;
 
     // Start is called before the first frame update
     void Awake()
@@ -33,16 +34,16 @@ public class PlayerHealthController : MonoBehaviour
 
     void Update ()
     {
-        // If the player has just been damaged...
-        if(damaged)
+        if(terminateAtPosition != null)
         {
-            // ... set the colour of the damageImage to the flash colour.
-            //spriteRenderer.color = tintColor;
-        }
-        // Otherwise...
-        else
-        {
-            // ... transition the colour back to clear.
+            if (transform.position.Equals(terminateAtPosition))
+            {
+                EventManager.TriggerEvent(EventNames.TERMINATE_MOVE);
+                RosterController.instance.OnCharacterReachGoal(gameObject.name);
+                GridController.instance.MarkGridTileUnOccupied(transform.position);
+                terminateAtPosition = null;
+                Destroy(gameObject);
+            }
         }
 
         // Reset the damaged flag.
@@ -101,10 +102,8 @@ public class PlayerHealthController : MonoBehaviour
         //playerShooting.enabled = false;
     }      
 
-    public void ReachGoal()
+    public void ReachGoal(Vector3 goalPosition)
     {
-        RosterController.instance.OnCharacterReachGoal(gameObject.name);
-        GridController.instance.MarkGridTileUnOccupied(transform.position);
-        gameObject.SetActive(false);
+        terminateAtPosition = goalPosition;
     }
 }

@@ -203,7 +203,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 538f3bcf63cded14c90e734848251693, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  startPos: {x: 8.5, y: -8.5, z: 0}
   movementStyle: {fileID: 11400000, guid: 80f7987cefb7e584e8f5687a6ca8f2e9, type: 2}
 --- !u!114 &3332405635181452224
 MonoBehaviour:
@@ -230,7 +229,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7c977014cd766d541922f5aaed955d06, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  startingHealth: 5
+  startingHealth: 2
   healthTextName: Bird Health Value
   healthLabelTextName: Bird Health Label
 --- !u!50 &8020617544951901623
