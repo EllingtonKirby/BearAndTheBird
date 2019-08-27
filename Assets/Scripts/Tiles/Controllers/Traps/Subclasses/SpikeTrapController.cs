@@ -8,11 +8,9 @@ public class SpikeTrapController : TrapController
 
     public override void OnEnemyEnter(EnemyHealthController enemyHealth)
     {
-        Debug.Log("### Enemy entered spike trap");
         enemyHealth.TakeDamage(damage);
         EventManager.TriggerEvent(EventNames.TERMINATE_MOVE);
-        Destroy(gameObject);
-        GridController.instance.DestroyTriggerAtPosition(transform.position);
+        GridController.instance.MarkTriggerForCleanup(transform.position);
     }
 
     public override void OnPlayerEnter(PlayerHealthController playerHealth)
@@ -22,8 +20,7 @@ public class SpikeTrapController : TrapController
         {
             playerHealth.TakeDamage(damage);
             EventManager.TriggerEvent(EventNames.TERMINATE_MOVE);
-            Destroy(gameObject);
-            GridController.instance.DestroyTriggerAtPosition(transform.position);
+            GridController.instance.MarkTriggerForCleanup(transform.position);
         }
     }
 }

@@ -16,6 +16,8 @@ public class GridController : MonoBehaviour
     private Dictionary<Vector3, GridTile> tiles;
     private Dictionary<Vector3, GridTile> colliders;
 
+    private List<Vector3> markedForCleanup;
+
     private void Awake()
     {
         if (instance == null)
@@ -29,6 +31,20 @@ public class GridController : MonoBehaviour
     void Start()
     {
         GetWorldTiles();
+        markedForCleanup = new List<Vector3>();
+    }
+
+    private void Update()
+    {
+        if (markedForCleanup.Count > 0)
+        {
+            foreach(Vector3 pos in markedForCleanup)
+            {
+                DestroyTriggerAtPosition(pos);
+            }
+
+            markedForCleanup.Clear();
+        }
     }
 
     private void GetWorldTiles()
@@ -96,7 +112,12 @@ public class GridController : MonoBehaviour
         EnemyPlacementController.instance.OnGridLayoutCompleted();
     }
 
-    public bool DestroyTriggerAtPosition(Vector3 origin)
+    public void MarkTriggerForCleanup(Vector3 origin)
+    {
+        markedForCleanup.Add(origin);
+    }
+
+    private bool DestroyTriggerAtPosition(Vector3 origin)
     {
         if (triggers.ContainsKey(origin))
         {

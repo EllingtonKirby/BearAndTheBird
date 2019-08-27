@@ -9,6 +9,6 @@ public class OnDeathExplodeController : OnDeathTakeActionController
 
     public override EnemyAction OnDeath()
     {
-        return new OnTurnExplodeAction(explosion, transform);
+        return new OnTurnExplodeAction(explosion, transform, false);
     }
 }

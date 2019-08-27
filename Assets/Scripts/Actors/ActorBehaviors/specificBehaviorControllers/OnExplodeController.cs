@@ -10,7 +10,7 @@ public class OnExplodeController : MonoBehaviour, EnemyActionProvider
 
     public EnemyAction GetAction()
     {
-        return new OnTurnExplodeAction(explosion, gameObject.transform);
+        return new OnTurnExplodeAction(explosion, gameObject.transform, true);
     }
 
     // Start is called before the first frame update

@@ -12,7 +12,6 @@ public class AfterExplodeDestroy : MonoBehaviour
         if (shouldDestroy)
         {
             Destroy(transform.parent.gameObject);
-            EventManager.TriggerEvent(EventNames.END_MOVE);
         }
     }
 
