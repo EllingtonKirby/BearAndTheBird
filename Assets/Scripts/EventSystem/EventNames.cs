@@ -30,4 +30,7 @@ public static class EventNames
     public static string SHOW_MESSAGE = "show_message";
 
     public static string TERMINATE_MOVE = "terminate_move";
+
+    public static string TRAPS_DEACTIVATED = "traps_deactivated";
+    public static string TRAPS_ACTIVATED = "traps_activated";
 }

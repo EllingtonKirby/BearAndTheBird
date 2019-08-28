@@ -5,6 +5,7 @@ using UnityEngine;
 
 public class SpiderMineController : EnemyController
 {
+    public int visionRange;
 
     MoveToClosestPlayerEnemyController movementController;
     OnExplodeController explosionController;
@@ -30,7 +31,14 @@ public class SpiderMineController : EnemyController
             return explosionController.GetAction();
         } else
         {
-            return movementController.GetAction();
+            var pathToNearest = EnemyPlacementController.instance.GetEnemyPathToNearestCharacter(this);
+            if (pathToNearest.Count <= visionRange)
+            {
+                return movementController.GetAction();
+            } else
+            {
+                return new NoTurnAction();
+            }
         }
     }
 }

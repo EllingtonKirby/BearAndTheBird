@@ -124,6 +124,7 @@ public static class AStarHelper
         {
             magnitude += .3f;
         }
+
         return magnitude;
     }
 

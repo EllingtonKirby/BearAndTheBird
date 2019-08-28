@@ -7,15 +7,21 @@ public class MoveToClosestPlayerEnemyController : MonoBehaviour, EnemyActionProv
 {
     public MovementStyle movementStyle;
     public int availableMove;
-    private State state;
 
+    private State state;
+    private EnemyController enemyController;
+
+    //This is always called after the objects have been sorted, use cached position
     public EnemyAction GetAction()
     {
         var positionOfNearestCharacter = FindClosestPlayer().transform.position;
+
+        //Need to recalculate path as may have changed by previous moves
         var pathToNearestCharacter = AStarHelper.GetPath(
             GridController.instance.GetTileAtPosition(transform.position),
             GridController.instance.GetTileAtPosition(positionOfNearestCharacter)
         );
+
         var list = pathToNearestCharacter.ConvertAll(
             new System.Converter<GridTile, Vector2>(GetWorldPositionOfGridTile)
         );
@@ -39,57 +45,42 @@ public class MoveToClosestPlayerEnemyController : MonoBehaviour, EnemyActionProv
         }
     }
 
-    public GameObject FindClosestPlayer()
+    public PlayerCharacterController FindClosestPlayer()
     {
-        GameObject[] gos;
-        gos = GameObject.FindGameObjectsWithTag("Player");
-        GameObject closest = null;
-        float distance = Mathf.Infinity;
-        Vector3 position = transform.position;
-        foreach (GameObject go in gos)
-        {
-            Vector3 diff = go.transform.position - position;
-            float curDistance = diff.sqrMagnitude;
-            if (curDistance < distance)
-            {
-                closest = go;
-                distance = curDistance;
-            }
-        }
-        return closest;
+        return EnemyPlacementController.instance.GetNearestCharacter(enemyController);
     }
 
-    public GridTile FindClosestUnoccupiedTile(GameObject player)
-    {
-        //Flood fill via occupied state to find closest unoccupied tile
-        //  We probably want to do these flood fill operations pretty often
-        //Then A* towards that tile by enemies movement speed
-        var queue = new Queue<GridTile>();
-        queue.Enqueue(GridController.instance.GetTileAtPosition(player.transform.position));
+    //public GridTile FindClosestUnoccupiedTile(GameObject player)
+    //{
+    //    //Flood fill via occupied state to find closest unoccupied tile
+    //    //  We probably want to do these flood fill operations pretty often
+    //    //Then A* towards that tile by enemies movement speed
+    //    var queue = new Queue<GridTile>();
+    //    queue.Enqueue(GridController.instance.GetTileAtPosition(player.transform.position));
 
-        while (queue.Count > 0)
-        {
-            var top = queue.Peek();
-            queue.Dequeue();
-            if (top == null)
-            {
-                continue;
-            }
-            if (top.State != GridTile.MovementState.OCCUPIED)
-            {
-                return top;
-            }
-            else
-            {
-                foreach (Directions direction in System.Enum.GetValues(typeof(Directions)))
-                {
-                    queue.Enqueue(GridController.instance.GetNeighborAt(direction, top.WorldLocation));
-                }
-            }
-        }
+    //    while (queue.Count > 0)
+    //    {
+    //        var top = queue.Peek();
+    //        queue.Dequeue();
+    //        if (top == null)
+    //        {
+    //            continue;
+    //        }
+    //        if (top.State != GridTile.MovementState.OCCUPIED)
+    //        {
+    //            return top;
+    //        }
+    //        else
+    //        {
+    //            foreach (Directions direction in System.Enum.GetValues(typeof(Directions)))
+    //            {
+    //                queue.Enqueue(GridController.instance.GetNeighborAt(direction, top.WorldLocation));
+    //            }
+    //        }
+    //    }
 
-        return null;
-    }
+    //    return null;
+    //}
 
     private Vector2 GetWorldPositionOfGridTile(GridTile tile)
     {
@@ -99,6 +90,7 @@ public class MoveToClosestPlayerEnemyController : MonoBehaviour, EnemyActionProv
     void Start()
     {
         GridController.instance.MarkGridTileOccupied(transform.position);
+        enemyController = GetComponentInParent<EnemyController>();
     }
 
     public void SetSelectedForMovement()

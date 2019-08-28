@@ -17,6 +17,7 @@ public class GridController : MonoBehaviour
     private Dictionary<Vector3, GridTile> colliders;
 
     private List<Vector3> markedForCleanup;
+    private Dictionary<Vector3, TileBase> markedForRefresh;
 
     private void Awake()
     {
@@ -32,6 +33,7 @@ public class GridController : MonoBehaviour
     {
         GetWorldTiles();
         markedForCleanup = new List<Vector3>();
+        markedForRefresh = new Dictionary<Vector3, TileBase>();
     }
 
     private void Update()
@@ -44,6 +46,14 @@ public class GridController : MonoBehaviour
             }
 
             markedForCleanup.Clear();
+        }
+
+        if (markedForRefresh.Count > 0)
+        {
+            foreach(Vector3 pos in markedForRefresh.Keys)
+            {
+                RefreshTriggerAtPosition(pos, markedForRefresh[pos]);
+            }
         }
     }
 
@@ -108,9 +118,12 @@ public class GridController : MonoBehaviour
             };
             colliders.Add(tile.WorldLocation, tile);
         }
-
-        EnemyPlacementController.instance.OnGridLayoutCompleted();
     }
+
+    public void MarkTriggerForRefresh(Vector3 origin, TileBase toSet)
+    {
+        markedForRefresh[origin] = toSet;
+    } 
 
     public void MarkTriggerForCleanup(Vector3 origin)
     {
@@ -129,6 +142,16 @@ public class GridController : MonoBehaviour
         {
             return false;
         }
+    }
+
+    private void RefreshTriggerAtPosition(Vector3 origin, TileBase toSet)
+    {
+        if (triggers.ContainsKey(origin))
+        {
+            var tile = triggers[origin];
+            triggersMap.SetTile(tile.LocalPlace, toSet);
+        }
+
     }
 
     public GridTile GetTileAtPosition(Vector3 origin)

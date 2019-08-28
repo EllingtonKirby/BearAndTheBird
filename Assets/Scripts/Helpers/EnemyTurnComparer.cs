@@ -4,13 +4,6 @@ using UnityEngine;
 
 public class EnemyTurnComparer : Comparer<EnemyController>
 {
-    private Dictionary<GridTile, int> lengthOfEnemyMoves = new Dictionary<GridTile, int>();
-
-
-    public void Init()
-    {
-        lengthOfEnemyMoves.Clear();
-    }
 
     public override int Compare(EnemyController x, EnemyController y)
     {
@@ -21,8 +14,8 @@ public class EnemyTurnComparer : Comparer<EnemyController>
 
             if (xMover != null && yMover != null)
             {
-                var xClosest = GetNumberOfMovesFromSpot(xMover);
-                var yClosest = GetNumberOfMovesFromSpot(yMover);
+                var xClosest = GetNumberOfMovesFromSpot(x);
+                var yClosest = GetNumberOfMovesFromSpot(y);
                 
                 return xClosest.CompareTo(yClosest);
             }
@@ -30,14 +23,8 @@ public class EnemyTurnComparer : Comparer<EnemyController>
         return 0;
     }
 
-    private int GetNumberOfMovesFromSpot(MoveToClosestPlayerEnemyController mover)
+    private int GetNumberOfMovesFromSpot(EnemyController mover)
     {
-        var tile = GridController.instance.GetTileAtPosition(mover.transform.position);
-        if (!lengthOfEnemyMoves.ContainsKey(tile))
-        {
-            var closestPlayer = GridController.instance.GetTileAtPosition(mover.FindClosestPlayer().transform.position);
-            lengthOfEnemyMoves[tile] = AStarHelper.GetPath(tile, closestPlayer, true).Count;
-        }
-        return lengthOfEnemyMoves[tile];
+        return EnemyPlacementController.instance.GetEnemyPathToNearestCharacter(mover).Count;
     }
 }

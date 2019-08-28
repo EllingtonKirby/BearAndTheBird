@@ -136,6 +136,7 @@ public class TurnController : MonoBehaviour
         actionPointsText.text = "Enemy Turn";
         nextTurnGameObject.SetActive(false);
         EventManager.TriggerEvent(EventNames.ENEMY_TURN_START);
+        EnemyPlacementController.instance.EstablishEnemyPositions();
         EnemyRosterController.instance.InitTurnIterator();
         EnemyRosterController.instance.TakeEnemyTurn();
     }
