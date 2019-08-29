@@ -37,16 +37,6 @@ public class GroundTileByTileMovementAvailableController : MonoBehaviour, MouseE
         }
     }
 
-    private void OnMouseEnter()
-    {
-        EventManager.TriggerMouseEvent(EventNames.MOUSE_ENTER, this);
-    }
-
-    private void OnMouseDown()
-    {
-        EventManager.TriggerMouseEvent(EventNames.MOUSE_DOWN, this);
-    }
-
     public Action OnMouseDownAction()
     {
         return new NoAction();

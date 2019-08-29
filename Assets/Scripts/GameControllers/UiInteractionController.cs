@@ -7,7 +7,10 @@ using UnityEngine.Events;
 
 public class UiInteractionController : MonoBehaviour
 {
-    // Start is called before the first frame update
+    private RaycastHit2D[] hitAll;
+    private bool stopListenForMouseMove;
+    private bool stopListenForMouseClick;
+    
     void Start()
     {
         ListenForMouseEvents();
@@ -16,18 +19,41 @@ public class UiInteractionController : MonoBehaviour
         EventManager.StartListening(EventNames.ENEMY_TURN_COMPLETED, HandleEnemyTurnEnd);
     }
 
+
+    private void Update()
+    {
+        Vector3 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        Vector2 mousePos2D = new Vector2(mousePos.x, mousePos.y);
+        hitAll = Physics2D.RaycastAll(mousePos2D, Vector2.zero);
+        if (hitAll.Length > 0)
+        {
+            var isClick = Input.GetMouseButtonDown(0);
+
+            foreach (RaycastHit2D objectHit in hitAll)
+            {
+                var mouseEventActionProvider = objectHit.collider.gameObject.GetComponent<MouseEventActionProvider>();
+                if (mouseEventActionProvider == null)
+                {
+                    continue;
+                }
+                if (isClick && !stopListenForMouseClick)
+                {
+                    HandleMouseDownEvent(mouseEventActionProvider);
+                }
+                else if (!stopListenForMouseMove)
+                {
+                    HandleMouseEnterEvent(mouseEventActionProvider);
+                }
+            }
+        }
+    }
+
     private void HandleMouseDownEvent(System.Object data)
     {
         if (data is MouseEventActionProvider)
         {
             var mouseEventData = data as MouseEventActionProvider;
             StartCoroutine(mouseEventData.OnMouseDownAction().Perform());
-            //Example: The action provider is a player character. They return a ShowMovementGrid action. This action invokes the GridController to show the movement grid. 
-            //they might return a HideMovementGrid action. This invokes the GridController to hide the movement grid
-
-            //Example 2: The action provider is an interactable tile. It checks if movement is available for this square. 
-            //It might return an InteractWithTile action which performs the behavior of interacting with the tile
-
         }
         else
         {
@@ -50,26 +76,22 @@ public class UiInteractionController : MonoBehaviour
 
     private void ListenForMoveEvents()
     {
-        EventManager.StartListening(EventNames.START_MOVE, HandleStartMove);
-        EventManager.StartListening(EventNames.END_MOVE, HandleEndMove);
+        stopListenForMouseMove = false;
     }
 
     private void StopListenForMoveEvents()
     {
-        EventManager.StopListening(EventNames.START_MOVE, HandleStartMove);
-        EventManager.StopListening(EventNames.END_MOVE, HandleEndMove);
+        stopListenForMouseMove = true;
     }
 
     private void ListenForMouseEvents()
     {
-        EventManager.StartListening(EventNames.MOUSE_DOWN, HandleMouseDownEvent);
-        EventManager.StartListening(EventNames.MOUSE_ENTER, HandleMouseEnterEvent);
+        stopListenForMouseClick = false;
     }
 
     private void StopListenForMouseEvents()
     {
-        EventManager.StopListening(EventNames.MOUSE_DOWN, HandleMouseDownEvent);
-        EventManager.StopListening(EventNames.MOUSE_ENTER, HandleMouseEnterEvent);
+        stopListenForMouseClick = true;       
     }
 
     private void HandleStartMove(System.Object data)

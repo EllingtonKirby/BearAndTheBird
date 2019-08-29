@@ -17,22 +17,6 @@ public class PlayerCharacterController : MonoBehaviour, MouseEventActionProvider
         GridController.instance.MarkGridTileOccupied(transform.position);
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-    }
-
-    private void OnMouseDown()
-    {
-        Debug.Log("Player mouse down event");
-        EventManager.TriggerMouseEvent(EventNames.MOUSE_DOWN, this);
-    }
-
-    private void OnMouseEnter()
-    {
-        EventManager.TriggerMouseEvent(EventNames.MOUSE_ENTER, this);
-    }
-
     public Action OnMouseDownAction()
     {
         if (IsIdle())
