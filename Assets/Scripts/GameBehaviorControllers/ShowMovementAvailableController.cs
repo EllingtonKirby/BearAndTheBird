@@ -80,8 +80,8 @@ public class ShowMovementAvailableController : MonoBehaviour
     {
         var toInstantiate = new List<GridTile>();
 
-        start.State = GridTile.MovementState.OCCUPIED;
         start.CurrentMovementValue = style.actionCost;
+        tilesToReset.Add(start);
 
         Queue<GridTile> queue = new Queue<GridTile>();
         queue.Enqueue(start);

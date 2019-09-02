@@ -21,14 +21,14 @@ public class ShowMovementAvailableAction : Action
 
     public IEnumerator Perform()
     {
-        var currentActionPointsAvailable = TurnController.instance.GetActionPointsRemaining();
-        if (currentActionPointsAvailable > 0)
-        {
+        //var currentActionPointsAvailable = TurnController.instance.GetActionPointsRemaining();
+        //if (currentActionPointsAvailable > 0)
+        //{
             charSelected.SetSelectedForMovement();
             MovementController.instance.PrepareMovementForObject(toMove, charSelected, movementStyle.timeToMove);
             BreadCrumbController.instance.InitializeBreadCrumbTrail(startPosition);
             ShowMovementAvailableController.instance.ShowMovementAvailable(tiles, movementStyle.movementAvailableTile);
-        }
+        //}
         yield return null;
     }
 }

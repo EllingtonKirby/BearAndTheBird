@@ -137,8 +137,6 @@ public class GridController : MonoBehaviour
             var tile = triggers[origin];
             triggersMap.SetTile(tile.LocalPlace, null);
             triggers.Remove(origin);
-            var remainingTile = GetTileAtPosition(origin);
-            remainingTile.UpdateState(GridTile.MovementState.DEFAULT);
             return true;
         } else
         {

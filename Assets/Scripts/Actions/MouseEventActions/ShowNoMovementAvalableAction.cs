@@ -17,6 +17,7 @@ public class ShowNoMovementAvalableAction : Action
     {
         var eventName = string.Format(EventNames.CHARACTER_TEXT_DISPLAY, instanceId);
         EventManager.TriggerEvent(eventName, "No Movement Available");
+        ShowMovementAvailableController.instance.HideMovementAvailable();
         yield return null;
     }
 }
