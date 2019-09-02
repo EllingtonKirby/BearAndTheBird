@@ -6,11 +6,8 @@ public class RosterController : MonoBehaviour
 {
     public static RosterController instance;
 
-    public GameObject[] availableCharacters;
-    public int rosterSlots;
-
     private ArrayList activeRoster = new ArrayList();
-    private int activeCharacters = 2;
+    private int activeCharacters = 0;
 
     private void Awake()
     {
@@ -19,8 +16,12 @@ public class RosterController : MonoBehaviour
 
         else if (instance != this)
             Destroy(gameObject);
+    }
 
-        activeCharacters = availableCharacters.Length;
+    public void AddCharacterToRoster(GameObject character)
+    {
+        activeRoster.Add(character);
+        activeCharacters++;
     }
 
     public void OnCharacterDeath(string characterName)
@@ -47,10 +48,5 @@ public class RosterController : MonoBehaviour
         {
             MessageController.instace.ShowMessage(characterName + " Reached the goal!");
         }
-    }
-
-    public void OnGridCompleted()
-    {
-        
     }
 }

@@ -50,6 +50,12 @@ public class PlayerHealthController : MonoBehaviour
                 terminateAtPosition = null;
                 Destroy(gameObject);
             }
+        } else if (isDead)
+        {
+            RosterController.instance.OnCharacterDeath(gameObject.name);
+            GridController.instance.MarkGridTileUnOccupied(transform.position);
+            terminateAtPosition = null;
+            Destroy(gameObject);
         }
 
         damaged = false;

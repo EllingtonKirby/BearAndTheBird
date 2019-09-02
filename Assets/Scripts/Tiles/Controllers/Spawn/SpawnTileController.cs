@@ -12,6 +12,9 @@ public class SpawnTileController : MonoBehaviour
         if (characterToSpawn.tag == "Enemy")
         {
             EnemyRosterController.instance.AddEnemyToRoster(created);
+        } else if (characterToSpawn.tag == "Player")
+        {
+            RosterController.instance.AddCharacterToRoster(created);
         }
     }
 }

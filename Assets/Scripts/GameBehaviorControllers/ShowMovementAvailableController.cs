@@ -35,7 +35,7 @@ public class ShowMovementAvailableController : MonoBehaviour
             case TypesOfMovement.GROUND_BY_FLOOD_FILL:
                 return FloodFillTile(start, style);
             case TypesOfMovement.GROUND_BY_HOP:
-                return new List<GridTile>();
+                return GetTilesForShapeMove(start, style);
             default:
                 return new List<GridTile>();
         }
@@ -164,8 +164,54 @@ public class ShowMovementAvailableController : MonoBehaviour
 
     #region Shape Moves
 
+    public List<GridTile> GetTilesForShapeMove(GridTile start, MovementStyle movementStyle)
+    {
+        var tiles = new List<GridTile>();
+        var placesToCheck = GetTilesToCheckForShapeMove(start, movementStyle);
+        foreach(Vector3 position in placesToCheck)
+        {
+            var tileAt = GridController.instance.GetTileAtPosition(position);
+            if (tileAt != null)
+            {
+                if (movementStyle.elligibleStartingStates.Contains(tileAt.State))
+                {
+                    tiles.Add(tileAt);
+                }
+            }
+        }
+
+        return tiles;
+    }
+
+    private List<Vector3> GetTilesToCheckForShapeMove(GridTile start, MovementStyle movementStyle)
+    {
+        var offsetA = movementStyle.moveOffsetA;
+        var offsetB = movementStyle.moveOffsetB;
+
+        var startX = start.WorldLocation.x;
+        var startY = start.WorldLocation.y;
+
+        var offSets = new List<KeyValuePair<int, int>>
+        {
+            new KeyValuePair<int, int>(offsetA, offsetB),
+            new KeyValuePair<int, int>(-1 * offsetA, offsetB),
+            new KeyValuePair<int, int>(offsetA, -1 * offsetB),
+            new KeyValuePair<int, int>(-1 * offsetA, -1 * offsetB),
+            new KeyValuePair<int, int>(offsetB, offsetA),
+            new KeyValuePair<int, int>(-1 * offsetB, offsetA),
+            new KeyValuePair<int, int>(offsetB, -1 * offsetA),
+            new KeyValuePair<int, int>(-1 * offsetB, -1 * offsetA)
+        };
+
+        var tilesToCheck = new List<Vector3>();
+
+        foreach (KeyValuePair<int, int> offset in offSets)
+        {
+            tilesToCheck.Add(new Vector3(startX + offset.Key, startY + offset.Value));
+        }
+
+        return tilesToCheck;
+    }
+
     #endregion
-
-
-   
 }

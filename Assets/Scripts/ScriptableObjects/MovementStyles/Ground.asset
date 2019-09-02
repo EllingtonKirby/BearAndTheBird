@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   type: 1
   activatesTraps: 1
-  actionCost: 5
+  actionCost: 3
   individualMoveCost: 1
   regionFilter: 0
   timeToMove: 5

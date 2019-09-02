@@ -15,9 +15,12 @@ MonoBehaviour:
   type: 2
   activatesTraps: 1
   actionCost: 0
-  timeToMove: 0
-  movementAvailableTile: {fileID: 0}
+  individualMoveCost: 0
+  regionFilter: 0
+  timeToMove: 5
+  movementAvailableTile: {fileID: 3718167575818711992, guid: ad616a18ee20cf549a4010db085f056a,
+    type: 3}
   elligibleStartingStates: 0000000003000000
   targetState: 1
-  moveOffsetA: 0
-  moveOffsetB: 0
+  moveOffsetA: 2
+  moveOffsetB: 1
