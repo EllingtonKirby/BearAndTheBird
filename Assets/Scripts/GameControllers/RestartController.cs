@@ -7,6 +7,6 @@ public class RestartController : MonoBehaviour
 {
     public void Restart()
     {
-        SceneManager.LoadScene("main", LoadSceneMode.Single);
+        SceneManager.LoadScene("small level", LoadSceneMode.Single);
     }
 }

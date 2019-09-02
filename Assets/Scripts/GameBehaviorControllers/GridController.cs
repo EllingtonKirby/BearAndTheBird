@@ -137,6 +137,8 @@ public class GridController : MonoBehaviour
             var tile = triggers[origin];
             triggersMap.SetTile(tile.LocalPlace, null);
             triggers.Remove(origin);
+            var remainingTile = GetTileAtPosition(origin);
+            remainingTile.UpdateState(GridTile.MovementState.DEFAULT);
             return true;
         } else
         {
@@ -201,7 +203,7 @@ public class GridController : MonoBehaviour
         var tile = GetTileAtPosition(position);
         if (tile != null)
         {
-            tile.State = GridTile.MovementState.OCCUPIED;
+            tile.UpdateState(GridTile.MovementState.OCCUPIED);
         }
     }
 
@@ -210,7 +212,7 @@ public class GridController : MonoBehaviour
         var tile = GetTileAtPosition(position);
         if (tile != null)
         {
-            tile.State = GridTile.MovementState.DEFAULT;
+            tile.UpdateState(GridTile.MovementState.DEFAULT);
         }
     }
 

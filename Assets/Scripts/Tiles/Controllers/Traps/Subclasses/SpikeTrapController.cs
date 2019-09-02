@@ -51,7 +51,12 @@ public class SpikeTrapController : TrapController
         if (!isDepressed && playerCharacterController.movementStyle.activatesTraps)
         {
             playerHealth.TakeDamage(damage);
-            EventManager.TriggerEvent(EventNames.TERMINATE_MOVE);
+            if (playerHealth.GetCurrentHealth() > 0)
+            {
+                EventManager.TriggerEvent(EventNames.TERMINATE_MOVE);
+            } else {
+                playerHealth.ReachGoal(transform.position);
+            }
             GridController.instance.MarkTriggerForCleanup(transform.position);
         }
     }

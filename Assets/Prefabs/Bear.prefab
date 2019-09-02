@@ -249,7 +249,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7c977014cd766d541922f5aaed955d06, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  startingHealth: 4
+  startingHealth: 70
   healthTextName: Bear Health Value
   healthLabelTextName: Bear Health Label
 --- !u!50 &7552140213341508290

@@ -23,15 +23,16 @@ public class PlayerCharacterController : MonoBehaviour, MouseEventActionProvider
         {
             if (BreadCrumbController.instance.IsPotentialMoveInProgress() == false)
             {
-                if (!ShowMovementAvailableController.instance.CheckIsMoveAvailableFromTile(transform.position))
+                var start = GridController.instance.GetTileAtPosition(transform.position);
+                var tiles = ShowMovementAvailableController.instance.GetElligibleMovesFromPosition(start, movementStyle);
+                if (tiles.Count == 0)
                 {
                     Debug.Log("No movement available");
                     return new ShowNoMovementAvalableAction(transform.position, GetInstanceID());
                 }
                 else
                 {
-                    //Easy to abstract this action to do different things depending on the animal type
-                    return new ShowMovementAvailableAction(movementStyle, transform.position, this, this.gameObject);
+                    return new ShowMovementAvailableAction(movementStyle, transform.position, this, this.gameObject, tiles);
                 }
             }
             else

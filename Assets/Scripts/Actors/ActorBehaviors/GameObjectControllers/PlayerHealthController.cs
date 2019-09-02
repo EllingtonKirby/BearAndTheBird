@@ -38,42 +38,46 @@ public class PlayerHealthController : MonoBehaviour
         {
             if (transform.position.Equals(terminateAtPosition))
             {
+                if (isDead)
+                {
+                    RosterController.instance.OnCharacterDeath(gameObject.name);
+                } else
+                {
+                    RosterController.instance.OnCharacterReachGoal(gameObject.name);
+                }
                 EventManager.TriggerEvent(EventNames.TERMINATE_MOVE);
-                RosterController.instance.OnCharacterReachGoal(gameObject.name);
                 GridController.instance.MarkGridTileUnOccupied(transform.position);
                 terminateAtPosition = null;
                 Destroy(gameObject);
             }
         }
 
-        // Reset the damaged flag.
         damaged = false;
     }
 
+    public int GetCurrentHealth()
+    {
+        return currentHealth;
+    }
 
     public void TakeDamage (int amount)
     {
         Debug.Log("Taking damage");
-        // Set the damaged flag so the screen will flash.
         damaged = true;
 
         if (!isDead)
         {
-            // Reduce the current health by the damage amount.
             currentHealth -= amount;
-
-            // Set the health bar's value to the current health.
             healthText.text = currentHealth.ToString();
         }
         // Play the hurt sound effect.
         //playerAudio.Play ();
 
-        // If the player has lost all it's health and the death flag hasn't been set yet...
         if (currentHealth <= 0 && !isDead)
         {
             currentHealth = 0;
             healthText.text = currentHealth.ToString();
-            // ... it should die.
+            
             Death();
         }
     }
@@ -83,10 +87,7 @@ public class PlayerHealthController : MonoBehaviour
     {
         // Set the death flag so this function won't be called again.
         isDead = true;
-        RosterController.instance.OnCharacterDeath(gameObject.name);
-        GridController.instance.MarkGridTileUnOccupied(transform.position);
-        Destroy(gameObject);
-
+        
         // Turn off any remaining shooting effects.
         //playerShooting.DisableEffects ();
 
@@ -104,6 +105,6 @@ public class PlayerHealthController : MonoBehaviour
 
     public void ReachGoal(Vector3 goalPosition)
     {
-        terminateAtPosition = goalPosition;
+        terminateAtPosition = goalPosition; 
     }
 }

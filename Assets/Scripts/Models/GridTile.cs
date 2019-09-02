@@ -21,6 +21,19 @@ public class GridTile
 
     public int CurrentMovementValue{ get; set; }
 
+    private MovementState previousState;
+
+    public void UpdateState(MovementState newState)
+    {
+        previousState = State;
+        State = newState;
+    }
+
+    public void ResetToLastState()
+    {
+        State = previousState;
+    }
+
     public enum MovementState
     {
         DEFAULT,

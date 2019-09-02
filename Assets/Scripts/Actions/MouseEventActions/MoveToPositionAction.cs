@@ -11,7 +11,7 @@ public class MoveToPositionAction : Action
     public IEnumerator Perform()
     {
         EventManager.TriggerEvent(EventNames.START_MOVE);
-        ShowMovementAvailableController.instance.HideSquaresElligibleForMoveTile();
+        ShowMovementAvailableController.instance.HideMovementAvailable();
         BreadCrumbController.instance.ClearOriginOfMovement();
         BreadCrumbController.instance.ClearMovementStack();
         yield return MovementController.instance.ConsumeMovementQueueForObject();

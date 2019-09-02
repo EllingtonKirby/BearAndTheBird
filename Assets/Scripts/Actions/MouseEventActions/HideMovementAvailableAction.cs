@@ -20,7 +20,7 @@ public class HideMovementAvailableAction : Action
         //Order matters here, need to clear existing bread crumb trail
         MovementController.instance.CancelPreparedMovement();
         BreadCrumbController.instance.CancelMovement();
-        ShowMovementAvailableController.instance.HideSquaresElligibleForMoveTile();
+        ShowMovementAvailableController.instance.HideMovementAvailable();
         yield return null;
     }
 }

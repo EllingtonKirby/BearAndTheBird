@@ -8,7 +8,7 @@ public class ShowMovementAvailableController : MonoBehaviour
 {
     public static ShowMovementAvailableController instance;
     private Dictionary<Vector3, GameObject> instancedMovementGrids;
-    private GameObject tile;
+    private List<GridTile> tilesToReset;
 
     private void Awake()
     {
@@ -24,18 +24,47 @@ public class ShowMovementAvailableController : MonoBehaviour
     private void Start()
     {
         instancedMovementGrids = new Dictionary<Vector3, GameObject>();
+        tilesToReset = new List<GridTile>();
     }
 
-    public void HideSquaresElligibleForMoveTile()
+    public List<GridTile> GetElligibleMovesFromPosition(GridTile start, MovementStyle style)
     {
-        this.tile = null;
+        switch (style.type)
+        {
+            case TypesOfMovement.FLYING_BY_REGION:
+            case TypesOfMovement.GROUND_BY_FLOOD_FILL:
+                return FloodFillTile(start, style);
+            case TypesOfMovement.GROUND_BY_HOP:
+                return new List<GridTile>();
+            default:
+                return new List<GridTile>();
+        }
+
+    }
+
+    public void ShowMovementAvailable(List<GridTile> tiles, GameObject toShow)
+    {
+        foreach(GridTile location in tiles)
+        {
+            var selectedGrid = Instantiate(toShow, location.WorldLocation, Quaternion.identity);
+            instancedMovementGrids.Add(location.WorldLocation, selectedGrid);
+        }
+    }
+
+    public void HideMovementAvailable()
+    {
+        foreach(GridTile position in tilesToReset)
+        {
+            position.CurrentMovementValue = int.MinValue;
+            position.ResetToLastState();
+        }
+
+        tilesToReset.Clear();
+
         foreach (Vector3 vector3 in instancedMovementGrids.Keys)
         {
             var neighbor = GridController.instance.GetTileAtPosition(vector3);
-            if (neighbor.State == GridTile.MovementState.ELLIGIBLE_FOR_MOVE)
-            {
-                neighbor.State = GridTile.MovementState.DEFAULT;
-            }
+            neighbor.ResetToLastState();
             neighbor.CurrentMovementValue = int.MinValue;
             if (instancedMovementGrids[neighbor.WorldLocation] != null)
             {
@@ -45,42 +74,14 @@ public class ShowMovementAvailableController : MonoBehaviour
         instancedMovementGrids.Clear();
     }
 
-    public bool CheckIsMoveAvailableFromTile(Vector3 origin)
-    {
-        var top = GridController.instance.GetTileAtPosition(origin);
-        top.CurrentMovementValue = TurnController.instance.GetActionPointsRemaining();
-        foreach (Directions direction in System.Enum.GetValues(typeof(Directions)))
-        {
-            var neighbor = GridController.instance.GetNeighborAt(direction, top.WorldLocation);
-            if (neighbor != null && neighbor.State == GridTile.MovementState.DEFAULT)
-            {
-                if (top.CurrentMovementValue - neighbor.Cost >= 0 && top.CurrentMovementValue - neighbor.Cost > neighbor.CurrentMovementValue)
-                {
-                    return true;
-                }
-            }
-        }
-        return false;
-    }
+    #region Flood Fills
 
-    public void ShowSquaresElligibleForMoveTile(Vector3 origin, int move, GameObject tile)
+    public List<GridTile> FloodFillTile(GridTile start, MovementStyle style)
     {
-        this.tile = tile;
-        FloodFillTile(GridController.instance.GetTileAtPosition(origin), GridTile.MovementState.DEFAULT, GridTile.MovementState.ELLIGIBLE_FOR_MOVE, move, FloodFillBehavior.SHOW_MOVEMENT_AVAILABLE);
-    }
+        var toInstantiate = new List<GridTile>();
 
-    public void FloodFillTile(GridTile start, GridTile.MovementState targetState, GridTile.MovementState replacementState, int startingMovement, FloodFillBehavior behavior)
-    {
-        switch (behavior)
-        {
-            case FloodFillBehavior.SHOW_MOVEMENT_AVAILABLE:
-                start.State = GridTile.MovementState.OCCUPIED;
-                start.CurrentMovementValue = startingMovement;
-                instancedMovementGrids[start.WorldLocation] = null;
-                break;
-            case FloodFillBehavior.HIDE_MOVEMENT_AVAILABLE:
-                return;
-        }
+        start.State = GridTile.MovementState.OCCUPIED;
+        start.CurrentMovementValue = style.actionCost;
 
         Queue<GridTile> queue = new Queue<GridTile>();
         queue.Enqueue(start);
@@ -92,32 +93,79 @@ public class ShowMovementAvailableController : MonoBehaviour
 
             foreach (Directions direction in System.Enum.GetValues(typeof(Directions)))
             {
-                switch (behavior)
+                GridTile shouldAdd;
+                if (style.type == TypesOfMovement.FLYING_BY_REGION)
                 {
-                    case FloodFillBehavior.SHOW_MOVEMENT_AVAILABLE:
-                        CheckThenSetStateOfNeighborAtTile(top, direction, targetState, replacementState, queue, top.CurrentMovementValue);
-                        break;
-                    case FloodFillBehavior.HIDE_MOVEMENT_AVAILABLE:
-                        break;
+                    shouldAdd = CheckIfTileInRegion(top, direction, queue, style);
+                }
+                else
+                {
+                    shouldAdd = CheckThenSetStateOfNeighborAtTile(top, direction, queue, style);
+                }
+                if (shouldAdd != null)
+                {
+                    toInstantiate.Add(shouldAdd);
                 }
             }
         }
+
+        return toInstantiate;
     }
 
-    private void CheckThenSetStateOfNeighborAtTile(GridTile top, Directions direction, GridTile.MovementState targetState, GridTile.MovementState replacementState, Queue<GridTile> q, int movementRemaining)
+    private GridTile CheckThenSetStateOfNeighborAtTile(GridTile top, Directions direction, Queue<GridTile> q, MovementStyle style)
     {
         var neighbor = GridController.instance.GetNeighborAt(direction, top.WorldLocation);
-        if (neighbor != null && neighbor.State == targetState)
+        if (neighbor != null && style.elligibleStartingStates.Contains(neighbor.State))
         {
-            if (top.CurrentMovementValue - neighbor.Cost >= 0 && top.CurrentMovementValue - neighbor.Cost > neighbor.CurrentMovementValue)
+            if (top.CurrentMovementValue - style.individualMoveCost >= 0 && top.CurrentMovementValue - style.individualMoveCost > neighbor.CurrentMovementValue)
             {
-                neighbor.State = replacementState;
+                neighbor.UpdateState(style.targetState);
                 neighbor.CurrentMovementValue = top.CurrentMovementValue - neighbor.Cost;
                 q.Enqueue(neighbor);
 
-                var selectedGrid = Instantiate(tile, neighbor.WorldLocation, Quaternion.identity);
-                instancedMovementGrids.Add(neighbor.WorldLocation, selectedGrid);
+                return neighbor;
             }
         }
+        return null;
     }
+
+
+    #endregion
+
+    #region Region Fills
+
+    private GridTile CheckIfTileInRegion(GridTile top, Directions direction, Queue<GridTile> q, MovementStyle style)
+    {
+        var neighbor = GridController.instance.GetNeighborAt(direction, top.WorldLocation);
+        if (neighbor != null && style.elligibleStartingStates.Contains(neighbor.State))
+        {
+            var moveNormallyEligible = top.CurrentMovementValue - style.individualMoveCost >= 0;
+            var moveInExcludedRegion = moveNormallyEligible && (top.CurrentMovementValue - style.individualMoveCost > style.actionCost - style.regionFilter);
+            if (moveNormallyEligible)
+            {
+                neighbor.UpdateState(style.targetState);
+                neighbor.CurrentMovementValue = top.CurrentMovementValue - neighbor.Cost;
+                q.Enqueue(neighbor);
+
+                if (!moveInExcludedRegion)
+                {
+                    return neighbor;
+                }
+                else
+                {
+                    tilesToReset.Add(neighbor);
+                }
+            }
+        }
+        return null;
+    }
+
+    #endregion
+
+    #region Shape Moves
+
+    #endregion
+
+
+   
 }
