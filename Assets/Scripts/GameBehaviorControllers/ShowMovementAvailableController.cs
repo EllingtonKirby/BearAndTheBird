@@ -31,12 +31,14 @@ public class ShowMovementAvailableController : MonoBehaviour
     {
         switch (style.type)
         {
+            case TypesOfMovement.FLYING_BY_STRAIGHT_UNTIL_BARRIER:
+                return GetMovesInDirectionUntilBarrier(start, style);
             case TypesOfMovement.FLYING_BY_REGION:
             case TypesOfMovement.GROUND_BY_FLOOD_FILL:
                 return FloodFillTile(start, style);
             case TypesOfMovement.GROUND_BY_HOP:
                 return GetTilesForShapeMove(start, style);
-            case TypesOfMovement.GROUND_BY_SET_AMOUNT:
+            case TypesOfMovement.GROUND_BY_SET_CARDINAL_DIRECTION:
                 return GetTilesInCardinalDirections(start, style);
             default:
                 return new List<GridTile>();
@@ -139,22 +141,23 @@ public class ShowMovementAvailableController : MonoBehaviour
     private GridTile CheckIfTileInRegion(GridTile top, Directions direction, Queue<GridTile> q, MovementStyle style)
     {
         var neighbor = GridController.instance.GetNeighborAt(direction, top.WorldLocation);
-        if (neighbor != null && style.elligibleStartingStates.Contains(neighbor.State))
+        if (neighbor != null)
         {
-            var moveNormallyEligible = top.CurrentMovementValue - style.individualMoveCost >= 0;
+            var moveNormallyEligible = top.CurrentMovementValue - style.individualMoveCost >= 0 && top.CurrentMovementValue - style.individualMoveCost > neighbor.CurrentMovementValue;
             var moveInExcludedRegion = moveNormallyEligible && (top.CurrentMovementValue - style.individualMoveCost > style.actionCost - style.regionFilter);
             if (moveNormallyEligible)
             {
-                neighbor.UpdateState(style.targetState);
                 neighbor.CurrentMovementValue = top.CurrentMovementValue - neighbor.Cost;
                 q.Enqueue(neighbor);
 
-                if (!moveInExcludedRegion)
+                if (!moveInExcludedRegion && style.elligibleStartingStates.Contains(neighbor.State))
                 {
+                    neighbor.UpdateState(style.targetState);
                     return neighbor;
                 }
                 else
                 {
+                    neighbor.UpdateState(style.targetState);
                     tilesToReset.Add(neighbor);
                 }
             }
@@ -193,17 +196,7 @@ public class ShowMovementAvailableController : MonoBehaviour
         var startX = start.WorldLocation.x;
         var startY = start.WorldLocation.y;
 
-        var offSets = new List<KeyValuePair<int, int>>
-        {
-            new KeyValuePair<int, int>(offsetA, offsetB),
-            new KeyValuePair<int, int>(-1 * offsetA, offsetB),
-            new KeyValuePair<int, int>(offsetA, -1 * offsetB),
-            new KeyValuePair<int, int>(-1 * offsetA, -1 * offsetB),
-            new KeyValuePair<int, int>(offsetB, offsetA),
-            new KeyValuePair<int, int>(-1 * offsetB, offsetA),
-            new KeyValuePair<int, int>(offsetB, -1 * offsetA),
-            new KeyValuePair<int, int>(-1 * offsetB, -1 * offsetA)
-        };
+        var offSets = GetOffsetsFromPosition(offsetA, offsetB);
 
         var tilesToCheck = new List<Vector3>();
 
@@ -215,9 +208,26 @@ public class ShowMovementAvailableController : MonoBehaviour
         return tilesToCheck;
     }
 
+    private List<KeyValuePair<int, int>> GetOffsetsFromPosition(int offsetA, int offsetB)
+    {
+        return new List<KeyValuePair<int, int>>
+        {
+            new KeyValuePair<int, int>(offsetA, offsetB),
+            new KeyValuePair<int, int>(-1 * offsetA, offsetB),
+            new KeyValuePair<int, int>(offsetA, -1 * offsetB),
+            new KeyValuePair<int, int>(-1 * offsetA, -1 * offsetB),
+            new KeyValuePair<int, int>(offsetB, offsetA),
+            new KeyValuePair<int, int>(-1 * offsetB, offsetA),
+            new KeyValuePair<int, int>(offsetB, -1 * offsetA),
+            new KeyValuePair<int, int>(-1 * offsetB, -1 * offsetA)
+        };
+    }
+
     #endregion
 
     #region Direction Moves
+
+    #region Cardinal Direction Move
 
     public List<GridTile> GetTilesInCardinalDirections(GridTile start, MovementStyle style)
     {
@@ -252,6 +262,75 @@ public class ShowMovementAvailableController : MonoBehaviour
 
         return accumulator;
     }
+    #endregion
+
+    #region Straight Direction Until Barrier Move
+
+    public List<GridTile> GetMovesInDirectionUntilBarrier(GridTile start, MovementStyle style)
+    {
+        var instantiated = new List<GridTile>();
+
+        var startX = start.WorldLocation.x;
+        var startY = start.WorldLocation.y;
+
+        var offsetsToTest = new List<KeyValuePair<int, int>>
+        {
+            new KeyValuePair<int, int>(0, 1),
+            new KeyValuePair<int, int>(1, 1),
+            new KeyValuePair<int, int>(1, 0),
+            new KeyValuePair<int, int>(1, -1),
+            new KeyValuePair<int, int>(0, -1),
+            new KeyValuePair<int, int>(-1, -1),
+            new KeyValuePair<int, int>(-1, 0),
+            new KeyValuePair<int, int>(-1, 1)
+        };
+
+        foreach(KeyValuePair<int, int> offset in offsetsToTest)
+        {
+            var currentOffset = 0;
+            GridTile elligble = null;
+            do
+            {
+                var testX = offset.Key;
+                var testY = offset.Value;
+                if (offset.Key > 0)
+                {
+                    testX += currentOffset;
+                } else if (offset.Key < 0)
+                {
+                    testX -= currentOffset;
+                }
+                if (offset.Value > 0)
+                {
+                    testY += currentOffset;
+                } else if (offset.Value < 0)
+                {
+                    testY -= currentOffset;
+                }
+
+                var location = new Vector3(startX + testX, startY + testY);
+                var tileAt = GridController.instance.GetTileAtPosition(location);
+                if (tileAt != null && style.elligibleStartingStates.Contains(tileAt.State))
+                {
+                    elligble = tileAt;
+                    currentOffset++;
+                } else
+                {
+                    break;
+                }
+            } while (true);
+
+            if (elligble != null)
+            {
+                instantiated.Add(elligble);
+            }
+        }
+
+
+        return instantiated;
+    }
+
+    #endregion
 
     #endregion
 }

@@ -10,17 +10,17 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 5b6acfa682b21354eb430be256cb717e, type: 3}
-  m_Name: Flying
+  m_Name: Ground Tile Flood Fill
   m_EditorClassIdentifier: 
   type: 2
-  activatesTraps: 0
-  actionCost: 4
+  activatesTraps: 1
+  actionCost: 5
   individualMoveCost: 1
-  regionFilter: 4
+  regionFilter: 0
   timeToMove: 10
-  movementAvailableTile: {fileID: 3718167575818711992, guid: ad616a18ee20cf549a4010db085f056a,
+  movementAvailableTile: {fileID: 1367085807297934, guid: 18f94d6cc6c2b0b4695bca3724680cfa,
     type: 3}
-  elligibleStartingStates: 0000000003000000
+  elligibleStartingStates: 00000000
   targetState: 1
   moveOffsetA: 0
   moveOffsetB: 0

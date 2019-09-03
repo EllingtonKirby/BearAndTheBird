@@ -10,17 +10,17 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 5b6acfa682b21354eb430be256cb717e, type: 3}
-  m_Name: Frog
+  m_Name: Bird
   m_EditorClassIdentifier: 
-  type: 3
-  activatesTraps: 1
-  actionCost: 0
-  individualMoveCost: 0
-  regionFilter: 0
-  timeToMove: 5
+  type: 1
+  activatesTraps: 0
+  actionCost: 4
+  individualMoveCost: 1
+  regionFilter: 4
+  timeToMove: 10
   movementAvailableTile: {fileID: 3718167575818711992, guid: ad616a18ee20cf549a4010db085f056a,
     type: 3}
   elligibleStartingStates: 0000000003000000
   targetState: 1
-  moveOffsetA: 2
-  moveOffsetB: 1
+  moveOffsetA: 0
+  moveOffsetB: 0
