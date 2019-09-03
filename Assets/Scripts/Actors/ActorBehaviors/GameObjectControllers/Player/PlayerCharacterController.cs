@@ -6,6 +6,7 @@ using UnityEngine;
 public class PlayerCharacterController : MonoBehaviour, MouseEventActionProvider, MovementStyleProvider, StatefulActor
 {
     public MovementStyle movementStyle;
+    public CharacterTypes type;
 
     private State state;
     private bool dirtyState = false;

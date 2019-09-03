@@ -50,37 +50,6 @@ public class MoveToClosestPlayerEnemyController : MonoBehaviour, EnemyActionProv
         return EnemyPlacementController.instance.GetNearestCharacter(enemyController);
     }
 
-    //public GridTile FindClosestUnoccupiedTile(GameObject player)
-    //{
-    //    //Flood fill via occupied state to find closest unoccupied tile
-    //    //  We probably want to do these flood fill operations pretty often
-    //    //Then A* towards that tile by enemies movement speed
-    //    var queue = new Queue<GridTile>();
-    //    queue.Enqueue(GridController.instance.GetTileAtPosition(player.transform.position));
-
-    //    while (queue.Count > 0)
-    //    {
-    //        var top = queue.Peek();
-    //        queue.Dequeue();
-    //        if (top == null)
-    //        {
-    //            continue;
-    //        }
-    //        if (top.State != GridTile.MovementState.OCCUPIED)
-    //        {
-    //            return top;
-    //        }
-    //        else
-    //        {
-    //            foreach (Directions direction in System.Enum.GetValues(typeof(Directions)))
-    //            {
-    //                queue.Enqueue(GridController.instance.GetNeighborAt(direction, top.WorldLocation));
-    //            }
-    //        }
-    //    }
-
-    //    return null;
-    //}
 
     private Vector2 GetWorldPositionOfGridTile(GridTile tile)
     {

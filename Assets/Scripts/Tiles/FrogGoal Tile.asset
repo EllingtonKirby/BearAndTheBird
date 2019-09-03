@@ -9,11 +9,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6291881eeb41a46a4adac065c7e5c7ed, type: 3}
-  m_Name: Goal Tile
+  m_Script: {fileID: 11500000, guid: cd18c7c7e7c9643bda4250f3d6b7e8c2, type: 3}
+  m_Name: FrogGoal Tile
   m_EditorClassIdentifier: 
-  m_DefaultSprite: {fileID: 21300000, guid: 827633bdaddb5214c83636f9a8554c35, type: 3}
-  m_DefaultGameObject: {fileID: 1668888280045044859, guid: dc5baa8f484be6a4c9a1b76010ef7c60,
+  m_DefaultSprite: {fileID: 21300000, guid: 7d366f4db8db94adbb919424a400dc82, type: 3}
+  m_DefaultGameObject: {fileID: 7925060325507659423, guid: 0a219ab9bf1e44529bb66ef9001ed460,
     type: 3}
   m_DefaultColliderType: 0
   m_TilingRules: []

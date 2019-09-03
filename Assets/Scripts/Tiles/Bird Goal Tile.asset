@@ -1,0 +1,19 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cd18c7c7e7c9643bda4250f3d6b7e8c2, type: 3}
+  m_Name: Bird Goal Tile
+  m_EditorClassIdentifier: 
+  m_DefaultSprite: {fileID: 21300000, guid: 827351445b5ec4efabecb8f97666aca0, type: 3}
+  m_DefaultGameObject: {fileID: 3877972532628371027, guid: 714434f3980654b1d82d7a5cf053b8e3,
+    type: 3}
+  m_DefaultColliderType: 0
+  m_TilingRules: []

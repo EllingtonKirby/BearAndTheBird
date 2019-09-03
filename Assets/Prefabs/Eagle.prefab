@@ -204,6 +204,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   movementStyle: {fileID: 11400000, guid: 80f7987cefb7e584e8f5687a6ca8f2e9, type: 2}
+  type: 1
 --- !u!114 &3332405635181452224
 MonoBehaviour:
   m_ObjectHideFlags: 0
