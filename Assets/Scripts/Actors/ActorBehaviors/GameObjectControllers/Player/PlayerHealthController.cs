@@ -91,8 +91,10 @@ public class PlayerHealthController : MonoBehaviour
 
     void Death ()
     {
-        // Set the death flag so this function won't be called again.
-        isDead = true;
+		// Set the death flag so this function won't be called again.
+        
+		isDead = true;
+        EnemyPlacementController.instance.EstablishEnemyPositions();
         
         // Turn off any remaining shooting effects.
         //playerShooting.DisableEffects ();

@@ -12,11 +12,12 @@ public class ShowDebugSquareAction : OnAdjacentPlayerAction
     }
 
 
-    public void Perform()
+    public IEnumerator Perform()
     {
         var position1 = new Vector3(position.x -.25f, position.y);
         var position2 = new Vector3(position.x + .25f, position.y);
         Debug.DrawLine(position1, position2, Color.white, 2);
         Debug.Log("OnPlayerAdjacent called, at position " + position);
+        yield return null;
     }
 }

@@ -42,9 +42,7 @@ public abstract class OnPlayerAdjacentActionController : MonoBehaviour, Adjacent
         {
             if (hit != null && hit.transform.gameObject.tag == "Player")
             {
-                GetOnPlayerAdjacentAction(hit.transform.position).Perform();
-                //Maybe notify on the event bus here? So that the action can be taken when it is 
-                //this pieces turn
+                ActionResolutionQueueController.instance.EnqueueEnemyAction(GetOnPlayerAdjacentAction(hit.transform.position));
             }
         }
     }

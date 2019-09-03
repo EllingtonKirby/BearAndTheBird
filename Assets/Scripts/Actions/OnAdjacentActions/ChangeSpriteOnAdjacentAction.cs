@@ -13,8 +13,9 @@ public class ChangeSpriteOnAdjacentAction : OnAdjacentPlayerAction
         this.spriteToSet = spriteToSet;
     }
 
-    public void Perform()
+    public IEnumerator Perform()
     {
         spriteRenderer.sprite = spriteToSet;
+        yield return null;
     }
 }

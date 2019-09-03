@@ -7,7 +7,4 @@ public interface AdjacentPlayerActionProvider
     OnAdjacentPlayerAction GetOnPlayerAdjacentAction(Vector3 position);
 }
 
-public interface OnAdjacentPlayerAction
-{
-    void Perform();
-}
+public interface OnAdjacentPlayerAction : EnemyAction { }
