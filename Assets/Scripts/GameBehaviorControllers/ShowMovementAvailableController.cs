@@ -36,6 +36,8 @@ public class ShowMovementAvailableController : MonoBehaviour
                 return FloodFillTile(start, style);
             case TypesOfMovement.GROUND_BY_HOP:
                 return GetTilesForShapeMove(start, style);
+            case TypesOfMovement.GROUND_BY_SET_AMOUNT:
+                return GetTilesInCardinalDirections(start, style);
             default:
                 return new List<GridTile>();
         }
@@ -211,6 +213,44 @@ public class ShowMovementAvailableController : MonoBehaviour
         }
 
         return tilesToCheck;
+    }
+
+    #endregion
+
+    #region Direction Moves
+
+    public List<GridTile> GetTilesInCardinalDirections(GridTile start, MovementStyle style)
+    {
+        var toInstantiate = new List<GridTile>();
+
+        start.CurrentMovementValue = style.actionCost;
+        tilesToReset.Add(start);
+
+
+        foreach (Directions direction in System.Enum.GetValues(typeof(Directions)))
+        {
+            toInstantiate.AddRange(GetValidTilesInCardinalDirection(direction, start, style, new List<GridTile>()));
+        }
+
+        return toInstantiate;
+    }
+
+    private List<GridTile> GetValidTilesInCardinalDirection(Directions direction, GridTile top, MovementStyle style, List<GridTile> accumulator)
+    {
+        var neighbor = GridController.instance.GetNeighborAt(direction, top.WorldLocation);
+        if (neighbor != null && style.elligibleStartingStates.Contains(neighbor.State))
+        {
+            if (top.CurrentMovementValue - style.individualMoveCost >= 0 && top.CurrentMovementValue - style.individualMoveCost > neighbor.CurrentMovementValue)
+            {
+                neighbor.UpdateState(style.targetState);
+                neighbor.CurrentMovementValue = top.CurrentMovementValue - neighbor.Cost;
+
+                accumulator.Add(neighbor);
+                return GetValidTilesInCardinalDirection(direction, neighbor, style, accumulator);
+            }
+        }
+
+        return accumulator;
     }
 
     #endregion
