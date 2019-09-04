@@ -11,8 +11,9 @@ public class SpikeTrapController : TrapController
     private bool isDirty;
     private bool isDepressed;
 
-    private void Start()
+    public override void Start()
     {
+        base.Start();
         spriteRenderer = GetComponent<SpriteRenderer>();
         EventManager.StartListening(EventNames.TRAPS_DEACTIVATED, OnTrapDeactivated);
     }

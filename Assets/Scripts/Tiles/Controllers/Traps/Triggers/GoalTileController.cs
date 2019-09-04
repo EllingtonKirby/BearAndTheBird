@@ -17,28 +17,15 @@ public class GoalTileController : TrapController
     public CharacterTypes acceptedType;
     public List<Sprite> spriteVariants;
 
-
-    PlayerHealthController enteredCharacter;
-    private string tileEventName;
-    private bool stopListening;
     private SpriteRenderer spriteRenderer;
 
-    private void Start()
+    public override void Start()
     {
-        tileEventName = string.Format(EventNames.MOVED_TO_POSITION, transform.position.x, transform.position.y);
+        base.Start();
         spriteRenderer = GetComponent<SpriteRenderer>();
         spriteRenderer.sprite = spriteVariants[(int) acceptedType];
     }
 
-    private void Update()
-    {
-        if (stopListening)
-        {
-            EventManager.StopListening(tileEventName, OnCharacterMovementEvent);
-            enteredCharacter = null;
-            stopListening = false;
-        }   
-    }
 
     public override void OnEnemyEnter(EnemyHealthController enemyHealth)
     {
@@ -47,16 +34,6 @@ public class GoalTileController : TrapController
 
     public override void OnPlayerEnter(PlayerHealthController playerHealth)
     {
-        var playerController = playerHealth.GetComponentInParent<PlayerCharacterController>();
-        if (playerController.type == acceptedType)
-        {
-            enteredCharacter = playerHealth;
-            EventManager.StartListening(tileEventName, OnCharacterMovementEvent);
-        }
-    }
-
-    private void OnCharacterMovementEvent(object arg0) {
-        enteredCharacter.ReachGoal(transform.position);
-        stopListening = true;
+        playerHealth.ReachGoal(transform.position);
     }
 }

@@ -133,6 +133,7 @@ public class MovementController : MonoBehaviour
         GridController.instance.MarkGridTileOccupied(toMove.position);
         var eventName = string.Format(EventNames.MOVED_TO_POSITION, position.x, position.y);
         EventManager.TriggerEvent(eventName);
+        Debug.Log("Moved to position triggered " + eventName);
         lock (coroutineLock)
         {
             if (terminateAtEndOfMove)

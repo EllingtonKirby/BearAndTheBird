@@ -11,8 +11,9 @@ public class TriggerController : TrapController
     private bool isDepressed;
     private bool isDirty;
 
-    private void Start()
+    public override void Start()
     {
+        base.Start();
         spriteRenderer = GetComponent<SpriteRenderer>();   
     }
 
