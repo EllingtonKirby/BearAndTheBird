@@ -62,6 +62,11 @@ public class TurnController : MonoBehaviour
         }
     }
 
+    public TurnState GetState()
+    {
+        return state;
+    }
+
     public void CheckState()
     {
         if (turnCount % 2 == 1)

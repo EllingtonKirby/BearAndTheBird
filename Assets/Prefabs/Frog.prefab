@@ -13,8 +13,8 @@ GameObject:
   - component: {fileID: 6748696174453268258}
   - component: {fileID: 6748696174453268259}
   - component: {fileID: 6748696174453268261}
-  - component: {fileID: 6748696174453268262}
   - component: {fileID: 6748696174453268263}
+  - component: {fileID: 6748696174453268262}
   m_Layer: 0
   m_Name: Frog
   m_TagString: Player
@@ -147,6 +147,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   movementStyle: {fileID: 11400000, guid: c50ec5916dfa549dc87e0f1eaed3df0c, type: 2}
   type: 2
+--- !u!114 &6748696174453268263
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6748696174453268284}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7a9d26cbecfe1c242a40d9cf058b929d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  textBox: {fileID: 6748696175422222595}
 --- !u!114 &6748696174453268262
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -162,19 +175,6 @@ MonoBehaviour:
   startingHealth: 2
   healthTextName: Frog Health Value
   healthLabelTextName: Frog Health Label
---- !u!114 &6748696174453268263
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6748696174453268284}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7a9d26cbecfe1c242a40d9cf058b929d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  textBox: {fileID: 6748696175422222595}
 --- !u!1 &6748696175422222620
 GameObject:
   m_ObjectHideFlags: 0

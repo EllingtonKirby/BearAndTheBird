@@ -38,23 +38,22 @@ public static class AStarHelper
         while (openSet.Count > 0)
         {
             var current = openSetbyFScore.GetTop();
-            //We are trying to navigate to the closest unoccupied tile, so want to recreate from that point
-            //if (current == goal)
-            //{
-            //    return ReconstructPath(current, cameFrom);
-            //}
+            
+            if (current == goal)
+            {
+                return ReconstructPath(current, cameFrom, isRawCount);
+            }
 
             openSet.Remove(current);
             openSetbyFScore.Remove(current);
             closedSet.Add(current);
-
             foreach (Directions direction in System.Enum.GetValues(typeof(Directions)))
             {
                 var neighbor = GridController.instance.GetNeighborAt(direction, current.WorldLocation);
 
                 if (neighbor == null || closedSet.Contains(neighbor) || neighbor.State == GridTile.MovementState.COLLIDER)
                 {
-                    if (neighbor != goal)
+                    if (!goal.Equals(neighbor))
                     {
                         continue;
                     } else

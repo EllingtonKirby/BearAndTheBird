@@ -180,6 +180,7 @@ public class ShowMovementAvailableController : MonoBehaviour
             {
                 if (movementStyle.elligibleStartingStates.Contains(tileAt.State))
                 {
+                    tileAt.UpdateState(movementStyle.targetState);
                     tiles.Add(tileAt);
                 }
             }

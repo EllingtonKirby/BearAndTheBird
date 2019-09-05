@@ -59,6 +59,7 @@ public class EnemyPlacementController : MonoBehaviour
                 }
                 var end = GridController.instance.GetTileAtPosition(player.transform.position);
                 var toChar = AStarHelper.GetPath(start, end, true);
+                Debug.Log("Checking path to " + player.name + " and found path of length " + toChar.Count);
                 if (pos.Count == 0 || pos.Count > toChar.Count)
                 {
                     pos = toChar;

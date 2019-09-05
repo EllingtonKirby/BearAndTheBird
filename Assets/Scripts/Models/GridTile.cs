@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
-public class GridTile 
+public class GridTile
 {
     public Vector3Int LocalPlace { get; set; }
 
@@ -19,7 +19,7 @@ public class GridTile
 
     public int Cost { get; set; }
 
-    public int CurrentMovementValue{ get; set; }
+    public int CurrentMovementValue { get; set; }
 
     private MovementState previousState;
 
@@ -42,5 +42,17 @@ public class GridTile
         OCCUPIED,
         COLLIDER,
         NOT_IN_GRID
+    }
+
+    public override bool Equals(object obj)
+    {
+        if (obj is GridTile)
+        {
+            return ((GridTile)obj).State == this.State && ((GridTile)obj).LocalPlace == this.LocalPlace
+                && ((GridTile)obj).TilemapMember == this.TilemapMember;
+        } else
+        {
+            return false;
+        }
     }
 }

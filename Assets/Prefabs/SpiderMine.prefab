@@ -227,7 +227,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   movementStyle: {fileID: 11400000, guid: 5a9f38d95bfe4734cbb20a5e843305f1, type: 2}
-  availableMove: 2
+  availableMove: 3
 --- !u!114 &5747375804637528606
 MonoBehaviour:
   m_ObjectHideFlags: 0
