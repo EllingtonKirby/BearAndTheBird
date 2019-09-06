@@ -43,7 +43,7 @@ public abstract class OnPlayerAdjacentActionController : MonoBehaviour, Adjacent
             if (hit != null && hit.transform.gameObject.tag == "Player")
             {
                 var action = GetOnPlayerAdjacentAction(hit.transform.position);
-                if (TurnController.instance.GetState() == TurnController.TurnState.ENEMY_TURN_IN_PROGRESS)
+                if (TurnController.instance.GetState() == TurnController.TurnState.ENEMY_TURN)
                 {
                     ActionResolutionQueueController.instance.EnqueueEnemyAction(action);
                 } else

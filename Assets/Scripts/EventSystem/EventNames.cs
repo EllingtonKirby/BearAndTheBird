@@ -4,6 +4,7 @@ using UnityEngine;
 
 public static class EventNames 
 {
+    #region Game Object Events
     public static string END_TURN = "end_turn";
 
     public static string START_MOVE = "start_move";
@@ -33,4 +34,18 @@ public static class EventNames
 
     public static string TRAPS_DEACTIVATED = "traps_deactivated";
     public static string TRAPS_ACTIVATED = "traps_activated";
+    #endregion
+
+    #region UI Events
+    public static string UI_ACTION_POINT_CONSUMED = "action_point_consumed";
+
+    public static string UI_USER_END_TURN = "user_end_turn";
+    public static string UI_ENEMY_END_TURN = "enemy_end_turn";
+
+    public static string UI_CHARACTER_ACTIVATED = "character_activated";
+    public static string UI_CHARACTER_GOALED = "character_goaled";
+    public static string UI_CHARACTER_DEACTIVATED = "character_deactivated";
+
+    public static string UI_CHARACTER_HEALTH_CHANGE = "character_health_change";
+    #endregion
 }

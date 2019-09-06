@@ -141,7 +141,6 @@ public class BreadCrumbController : MonoBehaviour
 
     private void CreateBreadCrumb(BreadCrumb toAdd)
     {
-        Debug.Log("Creating breadcrumb with movement cost " + toAdd.movementCost);
         UpdateCurrentMovementValues(toAdd.movementCost);
 
         movementStack.Push(toAdd);

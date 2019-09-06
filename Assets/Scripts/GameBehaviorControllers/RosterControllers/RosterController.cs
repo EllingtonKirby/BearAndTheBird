@@ -33,7 +33,7 @@ public class RosterController : MonoBehaviour
         }
         else
         {
-            MessageController.instace.ShowMessage(characterName + " Died!");
+            
         }
     }
 
@@ -46,7 +46,7 @@ public class RosterController : MonoBehaviour
         }
         else
         {
-            MessageController.instace.ShowMessage(characterName + " Reached the goal!");
+         
         }
     }
 }
