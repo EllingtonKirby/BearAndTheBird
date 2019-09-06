@@ -4,7 +4,7 @@ using System;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
-public class GridController : MonoBehaviour
+public class GridController : MonoBehaviour, DoesOnLevelStart
 {
     public static GridController instance;
 
@@ -30,8 +30,7 @@ public class GridController : MonoBehaviour
     }
 
     void Start()
-    {
-        GetWorldTiles();
+    { 
         markedForCleanup = new List<Vector3>();
         markedForRefresh = new Dictionary<Vector3, TileBase>();
     }
@@ -55,6 +54,11 @@ public class GridController : MonoBehaviour
                 RefreshTriggerAtPosition(pos, markedForRefresh[pos]);
             }
         }
+    }
+
+    public void Instantiate()
+    {
+        GetWorldTiles();
     }
 
     private void GetWorldTiles()

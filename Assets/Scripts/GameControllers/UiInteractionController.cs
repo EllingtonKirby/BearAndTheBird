@@ -5,18 +5,35 @@ using UnityEngine;
 using UnityEngine.Events;
 
 
-public class UiInteractionController : MonoBehaviour
+public class UiInteractionController : MonoBehaviour, DoesOnLevelStart
 {
+
+    public static UiInteractionController instance;
+
     private RaycastHit2D[] hitAll;
     private bool stopListenForMouseMove;
     private bool stopListenForMouseClick;
-    
+
+    private void Awake()
+    {
+        if (instance == null)
+        {
+            instance = this;
+        }
+    }
+
     void Start()
     {
         ListenForMouseEvents();
         ListenForMoveEvents();
         EventManager.StartListening(EventNames.ENEMY_TURN_START, HandleEnemyTurnStart);
         EventManager.StartListening(EventNames.ENEMY_TURN_COMPLETED, HandleEnemyTurnEnd);
+    }
+
+    public void Instantiate()
+    {
+        ListenForMouseEvents();
+        ListenForMoveEvents();
     }
 
 

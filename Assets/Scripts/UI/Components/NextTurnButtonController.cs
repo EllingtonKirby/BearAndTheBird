@@ -14,7 +14,7 @@ public class NextTurnButtonController : MonoBehaviour
     void Start()
     {
         button = GetComponent<Button>();
-        label = GetComponent<Text>();
+        label = GetComponentInChildren<Text>();
         button.onClick.AddListener(OnButtonClick);
 
         EventManager.StartListening(EventNames.UI_USER_END_TURN, OnPlayerTurnEnd);

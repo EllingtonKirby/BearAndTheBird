@@ -10,9 +10,16 @@ public class TurnActionPointsController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        label = GetComponent<Text>();
+        EventManager.StartListening(EventNames.UI_LEVEL_LOAD, Initalize);
         EventManager.StartListening(EventNames.UI_ACTION_POINT_CONSUMED, DebitTurnActionPoint);
         EventManager.StartListening(EventNames.UI_USER_END_TURN, ShowNoMoreTurnActionPoints);
         EventManager.StartListening(EventNames.UI_ENEMY_END_TURN, ResetTurnActionPoints);
+    }
+
+    private void Initalize(object argument)
+    {
+        ResetTurnActionPoints(argument);
     }
 
     private void DebitTurnActionPoint(object argument)

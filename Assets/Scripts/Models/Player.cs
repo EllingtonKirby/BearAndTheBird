@@ -16,6 +16,8 @@ public class Player : ScriptableObject
 
     public int ActionPointsPerTurn { get; private set; }
 
+    public int ActionPointsUsedThisTurn { get; private set; }
+
     public List<Character> ActiveRoster { get; private set; }
     public List<Character> GoaledRoster { get; private set; }
     public List<Character> InActiveRoster { get; private set; }
@@ -23,8 +25,10 @@ public class Player : ScriptableObject
     public Player()
     {
         TurnCount = 1;
+        EnemyTurnCount = 0;
         ActionPointReserve = DEFAULT_ACTION_POINTS;
         ActionPointsPerTurn = DEFAULT_ACTION_POINTS_PER_TURN;
+        ActionPointsUsedThisTurn = 0;
 
         ActiveRoster = new List<Character>();
         GoaledRoster  = new List<Character>();
@@ -34,19 +38,22 @@ public class Player : ScriptableObject
 
     public void SpendActionPoint(int amount)
     {
-        ActionPointReserve -= amount;
+        ActionPointsUsedThisTurn += amount;
         EventManager.TriggerEvent(EventNames.UI_ACTION_POINT_CONSUMED, this);
     }
 
     public void TurnIncrement()
     {
         TurnCount++;
+        ActionPointReserve -= ActionPointsUsedThisTurn;
         EventManager.TriggerEvent(EventNames.UI_USER_END_TURN, this);
+        EventManager.TriggerEvent(EventNames.UI_DEBIT_TOTAL_ACTION_POINTS, this);
     }
 
     public void EnemyTurnIncrement()
     {
         EnemyTurnCount++;
+        ActionPointsUsedThisTurn = 0;
         EventManager.TriggerEvent(EventNames.UI_ENEMY_END_TURN, this);
     }
 

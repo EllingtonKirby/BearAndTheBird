@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class LevelStoreController : MonoBehaviour
+public class LevelStoreController : MonoBehaviour, DoesOnLevelStart
 {
     public static LevelStoreController instance;
 
@@ -16,13 +16,13 @@ public class LevelStoreController : MonoBehaviour
         }
     }
 
-    void Start()
-    {
-        player = new Player();
-    }
-
     public Player GetPlayer()
     {
         return player;
+    }
+
+    public void Instantiate()
+    {
+        player = new Player();
     }
 }

@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1667436459910503958}
   - component: {fileID: 1667436459910503959}
+  - component: {fileID: 8432105952889042370}
   m_Layer: 0
   m_Name: LevelStore
   m_TagString: Untagged
@@ -41,5 +42,17 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: fbd6817c0443142cab59a16912574b08, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &8432105952889042370
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1667436459910503957}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a080d0810623540f986a3ecafedd0d2d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 

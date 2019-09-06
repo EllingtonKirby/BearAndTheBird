@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class TurnController : MonoBehaviour
+public class TurnController : MonoBehaviour, DoesOnLevelStart
 {
     public static TurnController instance;
 
@@ -28,6 +28,11 @@ public class TurnController : MonoBehaviour
         EventManager.StartListening(EventNames.ENEMY_TURN_COMPLETED, delegate { HandleEnemyTurnEnd(); });
     }
 
+    public void Instantiate()
+    {
+        BeginTurn(LevelStoreController.instance.GetPlayer());
+    }
+
     public TurnState GetState()
     {
         return state;
@@ -41,6 +46,7 @@ public class TurnController : MonoBehaviour
     public void UseActionPoint(int actionCost)
     {
         currentActionPoints -= actionCost;
+        LevelStoreController.instance.GetPlayer().SpendActionPoint(actionCost);
     }
 
     public int GetActionPointsRemaining()

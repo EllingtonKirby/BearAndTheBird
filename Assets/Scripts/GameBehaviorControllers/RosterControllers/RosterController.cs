@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-public class RosterController : MonoBehaviour
+public class RosterController : MonoBehaviour, DoesOnLevelStart
 {
     public static RosterController instance;
 
@@ -48,5 +48,10 @@ public class RosterController : MonoBehaviour
         {
          
         }
+    }
+
+    public void Instantiate()
+    {
+        //Collect created characters into player
     }
 }

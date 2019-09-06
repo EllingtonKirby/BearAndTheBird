@@ -12,10 +12,10 @@ public class ActionPointSliderController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        mainSlider = GetComponent<Slider>();
-        label = GetComponent<Text>();
-        EventManager.StartListening(EventNames.UI_ACTION_POINT_CONSUMED, OnActionPointsChanged);
-        Initalize();
+        mainSlider = GetComponentInChildren<Slider>();
+        label = GetComponentInChildren<Text>();
+        EventManager.StartListening(EventNames.UI_DEBIT_TOTAL_ACTION_POINTS, OnActionPointsChanged);
+        EventManager.StartListening(EventNames.UI_LEVEL_LOAD, Initalize);
     }
 
 
@@ -27,14 +27,15 @@ public class ActionPointSliderController : MonoBehaviour
         label.text = GetActionPointsText(amount);
     }
 
-    private void Initalize()
+    private void Initalize(object argument)
     {
-        var player = LevelStoreController.instance.GetPlayer();
+        var player = argument as Player;
+        mainSlider.maxValue = player.ActionPointReserve;
         OnActionPointsChanged(player);
     }
 
     private string GetActionPointsText(int amount)
     {
-        return amount + " Remaining";
+        return amount + " Total Action Points Remaining";
     }
 }
