@@ -14,7 +14,7 @@ public class Player : ScriptableObject
 
     public int ActionPointReserve { get; private set; }
 
-    public int ActionPointsPerTurn { get; private set; }
+    public int ActionPointsPerTurn { get { return Mathf.Min(ActionPointReserve, DEFAULT_ACTION_POINTS_PER_TURN); }}
 
     public int ActionPointsUsedThisTurn { get; private set; }
 
@@ -27,7 +27,6 @@ public class Player : ScriptableObject
         TurnCount = 1;
         EnemyTurnCount = 0;
         ActionPointReserve = DEFAULT_ACTION_POINTS;
-        ActionPointsPerTurn = DEFAULT_ACTION_POINTS_PER_TURN;
         ActionPointsUsedThisTurn = 0;
 
         ActiveRoster = new List<Character>();
