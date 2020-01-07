@@ -60,6 +60,8 @@ public class TurnController : MonoBehaviour, DoesOnLevelStart
 
         var player = argument as Player;
         currentActionPoints = player.ActionPointsPerTurn;
+
+        //Could check the action point reserve here, trigger game over if it is 0
     }
 
     private void EndTurn(object argument)

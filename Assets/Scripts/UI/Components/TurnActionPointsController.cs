@@ -42,7 +42,7 @@ public class TurnActionPointsController : MonoBehaviour
     {
         if (points == 0)
         {
-            return "Waiting for enemy turn...";
+            return "Out of Action Points for this turn. Waiting for enemy turn...";
         } else
         {
             return points + " Action Points remaining this turn";
