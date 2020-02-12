@@ -40,6 +40,8 @@ public class ShowMovementAvailableController : MonoBehaviour
                 return GetTilesForShapeMove(start, style);
             case TypesOfMovement.GROUND_BY_SET_CARDINAL_DIRECTION:
                 return GetTilesInCardinalDirections(start, style);
+            //case TypesOfMovement.GROUND_BY_CHARGE_ATTACK:
+                //return
             default:
                 return new List<GridTile>();
         }
@@ -101,6 +103,12 @@ public class ShowMovementAvailableController : MonoBehaviour
                 if (style.type == TypesOfMovement.FLYING_BY_REGION)
                 {
                     shouldAdd = CheckIfTileInRegion(top, direction, queue, style);
+                }
+                else if (style.type == TypesOfMovement.GROUND_BY_CHARGE_ATTACK)
+                {
+                    //We need to find if a tile is elligble for a charge attack. The tile has to be occupied by an enemy and within an amount of moves = action points + 1
+                    //If the tile is elligible for a charge attack it becomes the last elligible tile for a move in that direction. 
+                    shouldAdd = null;
                 }
                 else
                 {
@@ -263,6 +271,7 @@ public class ShowMovementAvailableController : MonoBehaviour
 
         return accumulator;
     }
+
     #endregion
 
     #region Straight Direction Until Barrier Move
