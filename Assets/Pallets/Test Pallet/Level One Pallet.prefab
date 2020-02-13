@@ -138,7 +138,7 @@ Tilemap:
       m_ObjectToInstantiate: {fileID: 1853323795825492410, guid: 2315e0ea98a2bb34f8bbc885f7620b20,
         type: 3}
       m_TileFlags: 2
-      m_ColliderType: 0
+      m_ColliderType: 1
   - first: {x: -4, y: 0, z: 0}
     second:
       m_TileIndex: 6

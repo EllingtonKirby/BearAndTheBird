@@ -15,6 +15,7 @@ public class MovementStyle: ScriptableObject
     public float timeToMove;
 
     public GameObject movementAvailableTile;
+    public GameObject actionAvailableTile;
     public List<GridTile.MovementState> elligibleStartingStates;
     public GridTile.MovementState targetState;
 

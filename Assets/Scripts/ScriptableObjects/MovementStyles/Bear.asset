@@ -12,15 +12,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5b6acfa682b21354eb430be256cb717e, type: 3}
   m_Name: Bear
   m_EditorClassIdentifier: 
-  type: 4
+  type: 5
   activatesTraps: 1
   actionCost: 2
   individualMoveCost: 1
   regionFilter: 0
   timeToMove: 5
-  movementAvailableTile: {fileID: 1367085807297934, guid: 18f94d6cc6c2b0b4695bca3724680cfa,
+  movementAvailableTile: {fileID: 3085714224077631755, guid: 5c046773c6bb94c72a90719d43da2829,
     type: 3}
-  elligibleStartingStates: 00000000
+  elligibleStartingStates: 0000000003000000
   targetState: 1
   moveOffsetA: 0
   moveOffsetB: 0
