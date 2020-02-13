@@ -41,7 +41,7 @@ public class ShowMovementAvailableController : MonoBehaviour
             case TypesOfMovement.GROUND_BY_SET_CARDINAL_DIRECTION:
                 return GetTilesInCardinalDirections(start, style);
             case TypesOfMovement.GROUND_BY_CHARGE_ATTACK:
-                return GetTilesInCardinalDirections(start, style);
+                return GetValidTilesInChargeDirection(start, style);
             default:
                 return new List<GridTile>();
         }
@@ -259,16 +259,9 @@ public class ShowMovementAvailableController : MonoBehaviour
         {
             if (top.CurrentMovementValue - style.individualMoveCost >= 0 && top.CurrentMovementValue - style.individualMoveCost > neighbor.CurrentMovementValue)
             {
-                if (neighbor.State != GridTile.MovementState.OCCUPIED)
-                {
-                    neighbor.CurrentMovementValue = top.CurrentMovementValue - neighbor.Cost;
-                }
-                else
-                {
-                    neighbor.CurrentMovementValue = 0;
-                }
-
                 neighbor.UpdateState(style.targetState);
+                neighbor.CurrentMovementValue = top.CurrentMovementValue - neighbor.Cost;
+
                 accumulator.Add(neighbor);
                 return GetValidTilesInCardinalDirection(direction, neighbor, style, accumulator);
             }
@@ -276,6 +269,59 @@ public class ShowMovementAvailableController : MonoBehaviour
 
         return accumulator;
     }
+
+    #region Charge Moves
+
+    private List<GridTile> GetValidTilesInChargeDirection(GridTile start, MovementStyle style)
+    {
+        var toInstantiate = new List<GridTile>();
+
+        //Can charge one additional tile past movement range
+        start.CurrentMovementValue = style.actionCost + 1;
+        tilesToReset.Add(start);
+
+
+        foreach (Directions direction in System.Enum.GetValues(typeof(Directions)))
+        {
+            toInstantiate.AddRange(GetValidTilesInChargeDirection(direction, start, style, new List<GridTile>()));
+        }
+
+        return toInstantiate;
+    }
+
+    private List<GridTile> GetValidTilesInChargeDirection(Directions direction, GridTile top, MovementStyle style, List<GridTile> accumulator)
+    {
+        var neighbor = GridController.instance.GetNeighborAt(direction, top.WorldLocation);
+        if (neighbor != null && style.elligibleStartingStates.Contains(neighbor.State))
+        {
+            var leftoverMovement = top.CurrentMovementValue - style.individualMoveCost;
+            if (leftoverMovement >= 0 && leftoverMovement > neighbor.CurrentMovementValue)
+            {
+                if (leftoverMovement == 0 && neighbor.State != GridTile.MovementState.OCCUPIED)
+                {
+                    //At the max charge distance and unoccupied, don't include this tile
+                    return accumulator;
+                }
+
+                if (neighbor.State == GridTile.MovementState.OCCUPIED)
+                {
+                    neighbor.CurrentMovementValue = 0;
+                }
+                else
+                {
+                    neighbor.CurrentMovementValue = top.CurrentMovementValue - neighbor.Cost;
+                }
+
+                neighbor.UpdateState(style.targetState);
+                accumulator.Add(neighbor);
+                return GetValidTilesInChargeDirection(direction, neighbor, style, accumulator);
+            }
+        }
+
+        return accumulator;
+    }
+
+    #endregion
 
     #endregion
 
