@@ -8,6 +8,7 @@ public class ShowMovementAvailableAction : Action
     private readonly Vector2 startPosition;
     private readonly StatefulActor charSelected;
     private readonly GameObject toMove;
+
     private readonly List<GridTile> tiles;
 
     public ShowMovementAvailableAction(MovementStyle movementStyle, Vector3 startPosition, StatefulActor charSelected, GameObject toMove, List<GridTile> tiles)

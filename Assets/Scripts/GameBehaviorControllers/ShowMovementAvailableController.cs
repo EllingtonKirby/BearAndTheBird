@@ -40,8 +40,8 @@ public class ShowMovementAvailableController : MonoBehaviour
                 return GetTilesForShapeMove(start, style);
             case TypesOfMovement.GROUND_BY_SET_CARDINAL_DIRECTION:
                 return GetTilesInCardinalDirections(start, style);
-            //case TypesOfMovement.GROUND_BY_CHARGE_ATTACK:
-                //return
+            case TypesOfMovement.GROUND_BY_CHARGE_ATTACK:
+                return GetTilesInCardinalDirections(start, style);
             default:
                 return new List<GridTile>();
         }
@@ -234,8 +234,6 @@ public class ShowMovementAvailableController : MonoBehaviour
 
     #endregion
 
-    #region Direction Moves
-
     #region Cardinal Direction Move
 
     public List<GridTile> GetTilesInCardinalDirections(GridTile start, MovementStyle style)
@@ -261,9 +259,16 @@ public class ShowMovementAvailableController : MonoBehaviour
         {
             if (top.CurrentMovementValue - style.individualMoveCost >= 0 && top.CurrentMovementValue - style.individualMoveCost > neighbor.CurrentMovementValue)
             {
-                neighbor.UpdateState(style.targetState);
-                neighbor.CurrentMovementValue = top.CurrentMovementValue - neighbor.Cost;
+                if (neighbor.State != GridTile.MovementState.OCCUPIED)
+                {
+                    neighbor.CurrentMovementValue = top.CurrentMovementValue - neighbor.Cost;
+                }
+                else
+                {
+                    neighbor.CurrentMovementValue = 0;
+                }
 
+                neighbor.UpdateState(style.targetState);
                 accumulator.Add(neighbor);
                 return GetValidTilesInCardinalDirection(direction, neighbor, style, accumulator);
             }
@@ -339,8 +344,6 @@ public class ShowMovementAvailableController : MonoBehaviour
 
         return instantiated;
     }
-
-    #endregion
 
     #endregion
 }
