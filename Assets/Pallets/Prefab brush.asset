@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Prefab brush
   m_EditorClassIdentifier: 
   m_Cells:
-  - m_Tile: {fileID: 0}
+  - m_Tile: {fileID: 11400000, guid: 30f75a9abb7ca411db8bcd6a2c7c9bbe, type: 2}
     m_Matrix:
       e00: 1
       e01: 0
@@ -36,5 +36,6 @@ MonoBehaviour:
   m_Pivot: {x: 0, y: 0, z: 0}
   m_CanChangeZPosition: 0
   m_Prefabs:
-  - {fileID: 1668888280045044859, guid: dc5baa8f484be6a4c9a1b76010ef7c60, type: 3}
+  - {fileID: 8182706832870025024, guid: aad32e156f8dc4c54b06d585f2813a88, type: 3}
   m_PerlinScale: 0.5
+  m_Anchor: {x: 0.5, y: 0.5, z: 0.5}

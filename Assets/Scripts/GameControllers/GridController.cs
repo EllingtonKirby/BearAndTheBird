@@ -11,10 +11,12 @@ public class GridController : MonoBehaviour, DoesOnLevelStart
     public Tilemap tileMap;
     public Tilemap collidersMap;
     public Tilemap triggersMap;
+    public Tilemap foregroundMap;
 
     private Dictionary<Vector3, GridTile> triggers;
     private Dictionary<Vector3, GridTile> tiles;
     private Dictionary<Vector3, GridTile> colliders;
+    private Dictionary<Vector3, GridTile> foreground;
 
     private List<Vector3> markedForCleanup;
     private Dictionary<Vector3, TileBase> markedForRefresh;
@@ -121,6 +123,24 @@ public class GridController : MonoBehaviour, DoesOnLevelStart
                 CurrentMovementValue = int.MinValue              
             };
             colliders.Add(tile.WorldLocation, tile);
+        }
+
+        foreach (Vector3Int pos in foregroundMap.cellBounds.allPositionsWithin)
+        {
+           var localPlace = new Vector3Int(pos.x, pos.y, pos.z);
+           if (!foregroundMap.HasTile(localPlace)) continue;
+           var tile = new GridTile
+           {
+               LocalPlace = localPlace,
+               WorldLocation = foregroundMap.GetCellCenterWorld(localPlace),
+               TileBase = foregroundMap.GetTile(localPlace),
+               TilemapMember = foregroundMap,
+               Name = localPlace.x + "," + localPlace.y,
+               Cost = 0,
+               State = GridTile.MovementState.DEFAULT,
+               CurrentMovementValue = int.MinValue
+           };
+           foreground.Add(tile.WorldLocation, tile);
         }
     }
 
